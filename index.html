@@ -1,9 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Fresh</title>
+  <meta charset="UTF-8" />
+  <title>My Game Site</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      padding: 20px;
+      font-size: 28px;
+      background: #1c1c1c;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    iframe {
+      width: 90%;
+      height: 650px;
+      border: 2px solid white;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .note {
+      margin-top: 15px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 15px;
+      border: none;
+      background: #2d6cdf;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    button:hover {
+      background: #1f4fb3;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, Fresh Is back/h1>
+
+<header>
+  🎮 My Game Website
+</header>
+
+<div class="container">
+
+  <h2>Play Game</h2>
+
+  <button onclick="openGame()">Load Game</button>
+
+  <div id="gameBox"></div>
+
+  <div class="note">
+    If the game doesn’t load, the site may block embedding.
+  </div>
+
+</div>
+
+<script>
+function openGame() {
+  document.getElementById("gameBox").innerHTML = `
+    <iframe src="https://justnotfresh.base44.app"></iframe>
+  `;
+}
+</script>
+
 </body>
 </html>
