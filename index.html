@@ -1,101 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>FRESH EMBED!</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: white;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fresh Hub</title>
 
-    header {
-      padding: 20px;
-      font-size: 28px;
-      background: #1c1c1c;
-    }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #071a12;
+    color: white;
+}
 
-    .container {
-      padding: 20px;
-    }
+/* subtle grid glow background */
+body::before {
+    content: "";
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(#22c55e22 1px, transparent 1px);
+    background-size: 30px 30px;
+    z-index: -1;
+}
 
-    iframe {
-      width: 90%;
-      height: 650px;
-      border: 2px solid white;
-      border-radius: 10px;
-      margin-top: 20px;
-    }
+/* HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 80px 10%;
+}
 
-    .note {
-      margin-top: 15px;
-      color: #aaa;
-      font-size: 14px;
-    }
+/* TEXT */
+.hero-text h1 {
+    font-size: 60px;
+    margin: 0;
+}
 
-    button {
-      padding: 10px 20px;
-      margin: 8px;
-      border: none;
-      background: #2d6cdf;
-      color: white;
-      cursor: pointer;
-      border-radius: 6px;
-    }
+.hero-text span {
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    -webkit-background-clip: text;
+    color: transparent;
+}
 
-    button:hover {
-      background: #1f4fb3;
-    }
-  </style>
+.hero-text p {
+    margin-top: 20px;
+    max-width: 500px;
+    color: #bbf7d0;
+}
+
+/* BUTTONS */
+.buttons {
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 10px;
+    border: none;
+    margin-right: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-green {
+    background: #22c55e;
+    color: black;
+    box-shadow: 0 0 15px #22c55e88;
+}
+
+.btn-green:hover {
+    transform: scale(1.05);
+}
+
+.btn-dark {
+    background: #14532d;
+    color: #bbf7d0;
+}
+
+/* FLOATING CARDS */
+.hero-images {
+    position: relative;
+    width: 400px;
+    height: 300px;
+}
+
+.card {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 15px;
+    background: #14532d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #bbf7d0;
+    box-shadow: 0 0 20px #22c55e44;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+/* positioning */
+.card1 { top: 0; left: 50px; }
+.card2 { top: 120px; left: 200px; }
+.card3 { top: 50px; left: 250px; }
+.card4 { top: 180px; left: 50px; }
+
+/* GAME SECTION */
+.games {
+    padding: 40px 10%;
+}
+
+.games h2 {
+    margin-bottom: 20px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.game {
+    background: #14532d;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.game:hover {
+    background: #166534;
+    transform: scale(1.05);
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  🎮 FRESH REBORN
-</header>
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>THE <span>FRESH</span> HUB</h1>
+        <p>Dive into 250+ clean and smooth games. Everything is fast, simple, and fresh.</p>
 
-<div class="container">
+        <div class="buttons">
+            <button class="btn btn-green" onclick="scrollToGames()">START PLAYING</button>
+            <button class="btn btn-dark">BEST LINK</button>
+        </div>
+    </div>
 
-  <h2>OPEN FRESHYY</h2>
+    <div class="hero-images">
+        <div class="card card1">Game</div>
+        <div class="card card2">Play</div>
+        <div class="card card3">Fun</div>
+        <div class="card card4">Fast</div>
+    </div>
+</div>
 
-  <button onclick="openGame()">Load Game</button>
-  <button onclick="openFullScreen()">Full Screen</button>
+<!-- GAMES -->
+<div class="games" id="games">
+    <h2>🔥 Popular Games</h2>
 
-  <div id="gameBox"></div>
-
-  <div class="note">
-    If the game doesn’t load, the site may block embedding.
-    <br>
-    FRESH - COPYRIGHT 2026
-  </div>
-
+    <div class="grid">
+        <div class="game" onclick="openGame('https://1v1.lol')">1v1.LOL</div>
+        <div class="game" onclick="openGame('https://slopegame.io')">Slope</div>
+        <div class="game" onclick="openGame('https://retrobowl.me')">Retro Bowl</div>
+        <div class="game" onclick="openGame('https://krunker.io')">Krunker</div>
+    </div>
 </div>
 
 <script>
-function openGame() {
-  document.getElementById("gameBox").innerHTML = `
-    <iframe id="gameFrame" src="https://bonk.io"></iframe>
-  `;
+function openGame(url) {
+    window.open(url, "_blank");
 }
 
-function openFullScreen() {
-  const iframe = document.getElementById("gameFrame");
-
-  if (!iframe) {
-    alert("Load the game first!");
-    return;
-  }
-
-  if (iframe.requestFullscreen) {
-    iframe.requestFullscreen();
-  } else if (iframe.webkitRequestFullscreen) {
-    iframe.webkitRequestFullscreen();
-  } else if (iframe.msRequestFullscreen) {
-    iframe.msRequestFullscreen();
-  }
+function scrollToGames() {
+    document.getElementById("games").scrollIntoView({ behavior: "smooth" });
 }
 </script>
 
