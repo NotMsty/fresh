@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Fresh Games</title>
+
+<title>IXL | Math, Language Arts, Science, Social Studies</title>
+<link rel="icon" href="ixl.png">
 
 <style>
 body {
     margin: 0;
     font-family: Arial;
-    background: linear-gradient(to bottom, #0a0f1f, #000);
+    background: radial-gradient(circle at top, #0f172a, #000);
     color: white;
 }
 
@@ -17,11 +19,11 @@ body {
     position: fixed;
     width: 250px;
     height: 100%;
-    background: #0d1326;
+    background: #020617;
     overflow-y: scroll;
+    border-right: 1px solid #1e293b;
 }
 
-/* Buttons */
 .game-btn {
     display: flex;
     align-items: center;
@@ -29,22 +31,19 @@ body {
     padding: 10px;
     margin: 8px;
     border-radius: 10px;
-    background: #111a33;
+    background: #0f172a;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .game-btn:hover {
-    background: #1f2a50;
-    transform: scale(1.03);
+    background: #1e293b;
+    transform: scale(1.05);
 }
 
 .game-btn img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #1f2a50;
 }
 
 /* Main */
@@ -54,7 +53,6 @@ body {
     position: relative;
 }
 
-/* Iframe */
 iframe {
     width: 100%;
     height: 100%;
@@ -62,28 +60,42 @@ iframe {
     display: none;
 }
 
-/* Home screen */
+/* Home */
 .home {
     padding: 40px;
 }
 
 .title {
-    font-size: 40px;
-    font-weight: bold;
+    font-size: 50px;
+    background: linear-gradient(90deg, #38bdf8, #6366f1);
+    -webkit-background-clip: text;
+    color: transparent;
 }
 
-.desc {
-    margin-top: 15px;
-    font-size: 18px;
-    color: #ccc;
-    max-width: 700px;
+.subtitle {
+    color: #94a3b8;
+    margin-top: 10px;
 }
 
-.updates {
+/* Cards */
+.grid {
     margin-top: 30px;
-    background: #111a33;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #0f172a;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background: #1e293b;
 }
 
 /* Loading */
@@ -92,7 +104,6 @@ iframe {
     top: 50%;
     left: 60%;
     transform: translate(-50%, -50%);
-    font-size: 20px;
     display: none;
 }
 </style>
@@ -103,31 +114,22 @@ iframe {
 <div class="sidebar" id="sidebar"></div>
 
 <div class="main">
-    <!-- HOME HUB -->
-    <div id="home" class="home">
-        <div class="title">🎮 Welcome to Fresh Games</div>
 
-        <div class="desc">
-            Fresh Games is your all-in-one browser game hub.  
-            Play tons of games instantly with no downloads.  
-            Built for speed, simplicity, and unblocked access.
-        </div>
+<div id="home" class="home">
+    <div class="title">🍕 Fresh Games</div>
+    <div class="subtitle">Play tons of unblocked games instantly.</div>
 
-        <div class="updates">
-            <b>🔥 Latest Updates:</b>
-            <ul>
-                <li>Added 30+ new games</li>
-                <li>Improved loading system</li>
-                <li>Better performance and smoother UI</li>
-                <li>New game hub homepage</li>
-            </ul>
-        </div>
+    <div class="grid">
+        <div class="card" onclick="loadGame('https://bonk.io')">Bonk.io</div>
+        <div class="card" onclick="loadGame('https://run-3online.github.io')">Run 3</div>
+        <div class="card" onclick="loadGame('https://slope3.io/')">Slope</div>
+        <div class="card" onclick="loadGame('https://crossy-road.com/cross-road.embed')">Crossy Road</div>
     </div>
+</div>
 
-    <!-- GAME FRAME -->
-    <iframe id="frame"></iframe>
+<iframe id="frame"></iframe>
+<div id="loading">Loading...</div>
 
-    <div id="loading">Loading game...</div>
 </div>
 
 <script>
@@ -170,37 +172,25 @@ const games = [
 
 const sidebar = document.getElementById("sidebar");
 
-// Create buttons
 games.forEach(game => {
-    const div = document.createElement("div");
-    div.className = "game-btn";
-
-    div.onclick = () => loadGame(game[1]);
-
-    div.innerHTML = `
-        <img src="pfp.png">
-        <span>${game[0]}</span>
-    `;
-
-    sidebar.appendChild(div);
+    const btn = document.createElement("div");
+    btn.className = "game-btn";
+    btn.onclick = () => loadGame(game[1]);
+    btn.innerHTML = `<img src="pfp.png"><span>${game[0]}</span>`;
+    sidebar.appendChild(btn);
 });
 
-// Loader (NO popup, NO new tab)
 function loadGame(url) {
-    const frame = document.getElementById("frame");
-    const home = document.getElementById("home");
-    const loading = document.getElementById("loading");
+    document.getElementById("home").style.display = "none";
+    document.getElementById("frame").style.display = "block";
+    document.getElementById("loading").style.display = "block";
 
-    home.style.display = "none";
-    frame.style.display = "block";
-    loading.style.display = "block";
-
-    frame.src = url;
+    document.getElementById("frame").src = url;
 
     setTimeout(() => {
         try {
             frame.contentWindow.location.href;
-            loading.style.display = "none";
+            document.getElementById("loading").style.display = "none";
         } catch {
             window.location.replace(url);
         }
