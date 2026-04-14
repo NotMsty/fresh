@@ -2,217 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<title>IXL | Math, Language Arts, Science, Social Studies</title>
-<link rel="icon" href="ixl.png">
+<title>Msty Hub</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    background: #020617;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg, #0a0f1c, #000);
     color: white;
-    overflow: hidden;
+    text-align: center;
 }
 
-/* REMOVE WHITE SCROLLBAR */
-::-webkit-scrollbar {
-    width: 8px;
+/* HEADER */
+.header {
+    padding: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #00aaff;
 }
-::-webkit-scrollbar-track {
-    background: #020617;
+
+/* SEARCH BAR */
+.search-container {
+    margin: 20px;
 }
-::-webkit-scrollbar-thumb {
-    background: #1e293b;
+
+.search-bar {
+    width: 60%;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: #111;
+    color: white;
+}
+
+/* GAMES GRID */
+.games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.game {
+    background: #111;
+    border-radius: 15px;
+    padding: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.game:hover {
+    transform: scale(1.05);
+    background: #1a1a1a;
+}
+
+.game img {
+    width: 100%;
     border-radius: 10px;
 }
 
-/* Sidebar */
-.sidebar {
-    position: fixed;
-    width: 260px;
-    height: 100%;
-    background: #020617;
-    overflow-y: auto;
+.game-title {
+    margin-top: 10px;
 }
 
-/* Search */
-.search, .browser {
-    margin: 10px;
-    padding: 10px;
-    width: calc(100% - 20px);
-    border-radius: 8px;
-    border: none;
-    background: #0f172a;
-    color: white;
-}
-
-/* Game Button */
-.game-btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    margin: 8px;
-    border-radius: 12px;
-    background: #0f172a;
-    cursor: pointer;
-    transition: 0.2s;
-    user-select: none;
-}
-
-.game-btn:hover {
-    background: #1e293b;
-    transform: scale(1.03);
-}
-
-.game-btn img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-}
-
-/* Main */
-.main {
-    margin-left: 260px;
-    height: 100vh;
-    position: relative;
-}
-
-/* Frame */
+/* EMBED */
 iframe {
     width: 100%;
-    height: 100%;
+    height: 500px;
     border: none;
-}
-
-/* Top browser bar */
-.browser-bar {
-    position: absolute;
-    top: 0;
-    left: 260px;
-    right: 0;
-    height: 50px;
-    background: #020617;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    z-index: 10;
-}
-
-.browser {
-    flex: 1;
-}
-
-/* Frame offset */
-.frame-container {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
-    <input class="search" id="search" placeholder="Search games...">
-    <div id="sidebar"></div>
+<div class="header">🔥 Welcome to Msty Hub 🔥</div>
+
+<div class="search-container">
+    <input 
+        type="text" 
+        id="searchInput" 
+        class="search-bar" 
+        placeholder="Search games..."
+        onkeyup="searchGames()"
+    >
 </div>
 
-<!-- 🔥 BROWSER BAR -->
-<div class="browser-bar">
-    <input class="browser" id="browserInput" placeholder="Search Google or type URL...">
-</div>
+<div class="games" id="gameList">
 
-<div class="main">
-    <div class="frame-container">
-        <iframe id="frame"></iframe>
+    <div class="game" data-name="bonk io" onclick="loadGame('https://bonk.io/')">
+        <img src="https://bonk.io/img/bonkio-logo.png">
+        <div class="game-title">Bonk.io</div>
     </div>
+
+    <div class="game" data-name="tunnel rush" onclick="loadGame('https://tunnelrush.io/')">
+        <img src="https://tunnelrush.io/data/image/game.png">
+        <div class="game-title">Tunnel Rush</div>
+    </div>
+
+    <div class="game" data-name="run 3" onclick="loadGame('https://run3.io/')">
+        <img src="https://run3.io/data/image/game.png">
+        <div class="game-title">Run 3</div>
+    </div>
+
 </div>
+
+<div id="gameFrame"></div>
 
 <script>
-const games = [
-["Doge Miner","https://dogeminer-online.github.io/file/"],
-["Kart Bros","https://kartbros.io/"],
-["Tung Tung Clicker","https://www.tungsahurclicker.com/"],
-["Crossy Road","https://crossy-road.com/cross-road.embed"],
-["Infinite Craft","https://infinite-craft.gg/"],
-["Pretty Good Games","https://newunblockedgames.gitlab.io/"],
-["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
-["Bonk IO","https://bonk.io"],
-["Hitbox IO","https://hitbox.io"],
-["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
-["Block Blast","https://blockblast.game/game"],
-["AZ Games","https://azgames.io/"],
-["Geo Dash Spam","https://geometrydashspam.io/"],
-["Geometry Games","https://geometrygames.io"],
-["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
-["Car Climb Racing","https://run-3online.github.io/go/class-785.html"],
-["Madalin Stunt Cars 3","https://run-3online.github.io/go/class-566.html"],
-["Earn to Die","https://run-3online.github.io/go/class-523.html"],
-["Super Racing GT","https://run-3online.github.io/go/class-705.html"],
-["3D Car Simulator","https://sudoku-online.github.io/a2/3d-car-simulator/"],
-["Unblocked Games 66","https://unblockedgames66.io/"],
-["Run 3","https://run-3online.github.io"],
-["Bee Swarm Simulator","https://dddatt.github.io/bss/"],
-["Elastic Face","https://quiz-50.github.io/casual-games/elastic-face/"],
-["Tag","https://quiz-50.github.io/action-games/tag"],
-["Nut Simulator","https://quiz-50.github.io/casual-games/nut-simulator/"],
-["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
-["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
-["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
-["Slap Jack","https://slapjack.thirdwavesoft.com/"],
-["Slope V3","https://slope3.io/"],
-["Minecraft Packs","https://resourcepack.net/"],
-["Class 76","https://class-76.github.io/"],
-["MC Skins","https://mcskins.org/"]
-];
+function searchGames() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let games = document.getElementsByClassName("game");
 
-const sidebar = document.getElementById("sidebar");
-const search = document.getElementById("search");
-const frame = document.getElementById("frame");
-
-// Render games
-function render(filter="") {
-    sidebar.innerHTML = "";
-
-    games.filter(g => g[0].toLowerCase().includes(filter.toLowerCase()))
-    .forEach(game => {
-        const div = document.createElement("div");
-        div.className = "game-btn";
-
-        div.innerHTML = `
-            <img src="pfp.png">
-            <span>${game[0]}</span>
-        `;
-
-        div.onclick = () => frame.src = game[1];
-
-        sidebar.appendChild(div);
-    });
-}
-
-search.oninput = () => render(search.value);
-
-// 🔥 BROWSER SEARCH SYSTEM
-document.getElementById("browserInput").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-        let input = this.value.trim();
-
-        if (input.startsWith("http")) {
-            frame.src = input;
-        } else if (input.includes(".")) {
-            frame.src = "https://" + input;
+    for (let i = 0; i < games.length; i++) {
+        let name = games[i].getAttribute("data-name");
+        if (name.includes(input)) {
+            games[i].style.display = "block";
         } else {
-            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(input);
+            games[i].style.display = "none";
         }
     }
-});
+}
 
-render();
+function loadGame(url) {
+    document.getElementById("gameFrame").innerHTML = `
+        <iframe src="${url}"></iframe>
+    `;
+}
 </script>
 
 </body>
