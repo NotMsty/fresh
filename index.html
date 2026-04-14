@@ -2,90 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fresh Hub</title>
+<title>Bonk.io</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #071a12;
-    color: white;
+    background: black;
 }
 
-/* header */
-.header {
-    text-align: center;
-    padding: 20px;
-}
-
-.header h1 span {
-    color: #22c55e;
-}
-
-/* search */
-.search {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.search input {
-    padding: 10px;
-    width: 250px;
-    border-radius: 8px;
-    border: none;
-}
-
-/* category buttons */
-.categories {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.categories button {
-    margin: 5px;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 8px;
-    background: #14532d;
-    color: white;
-    cursor: pointer;
-}
-
-.categories button:hover {
-    background: #166534;
-}
-
-/* grid */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 15px;
-    padding: 15px;
-}
-
-.game {
-    background: #14532d;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    padding: 10px;
-    transition: 0.2s;
-}
-
-.game img {
-    width: 100%;
-    border-radius: 8px;
-}
-
-.game:hover {
-    transform: scale(1.05);
-}
-
-/* iframe */
 #gameFrame {
     width: 100%;
-    height: 80vh;
+    height: 100vh;
     border: none;
 }
 </style>
@@ -93,95 +20,17 @@ body {
 
 <body>
 
-<div class="header">
-    <h1>THE <span>FRESH</span> HUB</h1>
-</div>
-
-<div class="search">
-    <input type="text" placeholder="Search..." onkeyup="searchGames(this.value)">
-</div>
-
-<div class="categories">
-    <button onclick="filter('all')">All</button>
-    <button onclick="filter('io')">IO</button>
-    <button onclick="filter('driving')">Driving</button>
-    <button onclick="filter('arcade')">Arcade</button>
-</div>
-
-<div class="grid" id="games">
-
-<!-- IO -->
-<div class="game io" onclick="playGame('https://bonk.io')">
-<img src="https://bonk.io/favicon.ico">
-<p>Bonk.io</p>
-</div>
-
-<div class="game io" onclick="playGame('https://kartbros.io/')">
-<img src="https://kartbros.io/favicon.ico">
-<p>Kart Bros</p>
-</div>
-
-<!-- DRIVING -->
-<div class="game driving" onclick="playGame('https://sudoku-online.github.io/a2/3d-car-simulator/')">
-<img src="https://sudoku-online.github.io/favicon.ico">
-<p>3D Car Sim</p>
-</div>
-
-<!-- ARCADE -->
-<div class="game arcade" onclick="playGame('https://crossy-road.com/cross-road.embed')">
-<img src="https://crossy-road.com/favicon.ico">
-<p>Crossy Road</p>
-</div>
-
-<div class="game arcade" onclick="playGame('https://geometrydash-lite.com/geometry-dash-lite.embed')">
-<img src="https://geometrydash-lite.com/favicon.ico">
-<p>Geometry Dash</p>
-</div>
-
-<div class="game arcade" onclick="playGame('https://run-3online.github.io')">
-<img src="https://run-3online.github.io/favicon.ico">
-<p>Run 3</p>
-</div>
-
-</div>
-
-<iframe id="gameFrame"></iframe>
+<iframe id="gameFrame" src="https://bonk.io"></iframe>
 
 <script>
-function playGame(url) {
-    let frame = document.getElementById("gameFrame");
-    frame.src = url;
-
-    // fallback if blocked
-    setTimeout(() => {
-        try {
-            frame.contentWindow.location.href;
-        } catch {
-            window.open(url, "_blank");
-        }
-    }, 1500);
-}
-
-function searchGames(value) {
-    let input = value.toLowerCase();
-    let games = document.querySelectorAll(".game");
-
-    games.forEach(game => {
-        game.style.display = game.innerText.toLowerCase().includes(input) ? "block" : "none";
-    });
-}
-
-function filter(category) {
-    let games = document.querySelectorAll(".game");
-
-    games.forEach(game => {
-        if (category === "all" || game.classList.contains(category)) {
-            game.style.display = "block";
-        } else {
-            game.style.display = "none";
-        }
-    });
-}
+// fallback if blocked
+setTimeout(() => {
+    try {
+        document.getElementById("gameFrame").contentWindow.location.href;
+    } catch {
+        window.open("https://bonk.io", "_blank");
+    }
+}, 1000);
 </script>
 
 </body>
