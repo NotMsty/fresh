@@ -2,35 +2,159 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bonk.io</title>
+<title>Game Hub</title>
 
 <style>
 body {
     margin: 0;
-    background: black;
+    font-family: Arial;
+    background: linear-gradient(to bottom, #0a0f1f, #000);
+    color: white;
 }
 
-#gameFrame {
-    width: 100%;
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    background: #0d1326;
+    overflow-y: scroll;
+}
+
+/* Buttons */
+.game-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    margin: 8px;
+    border-radius: 10px;
+    background: #111a33;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.game-btn:hover {
+    background: #1f2a50;
+    transform: scale(1.03);
+}
+
+.game-btn img {
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+}
+
+/* Main */
+.main {
+    margin-left: 250px;
     height: 100vh;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
     border: none;
+}
+
+/* Error */
+#error {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    display: none;
+    font-size: 22px;
 }
 </style>
 </head>
 
 <body>
 
-<iframe id="gameFrame" src="https://bonk.io"></iframe>
+<div class="sidebar">
+
+<!-- ALL GAMES -->
+<script>
+const games = [
+["Doge Miner","https://dogeminer-online.github.io/file/"],
+["Kart Bros","https://kartbros.io/"],
+["Tung Tung Clicker","https://www.tungsahurclicker.com/"],
+["Crossy Road","https://crossy-road.com/cross-road.embed"],
+["Infinite Craft","https://infinite-craft.gg/"],
+["Pretty Good Games","https://newunblockedgames.gitlab.io/"],
+["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
+["Bonk IO","https://bonk.io"],
+["Hitbox IO","https://hitbox.io"],
+["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
+["Block Blast","https://blockblast.game/game"],
+["AZ Games","https://azgames.io/"],
+["Geo Dash Spam","https://geometrydashspam.io/"],
+["Geometry Games","https://geometrygames.io"],
+["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
+["Car Climb Racing","https://run-3online.github.io/go/class-785.html"],
+["Madalin Stunt Cars 3","https://run-3online.github.io/go/class-566.html"],
+["Earn to Die","https://run-3online.github.io/go/class-523.html"],
+["Super Racing GT","https://run-3online.github.io/go/class-705.html"],
+["3D Car Simulator","https://sudoku-online.github.io/a2/3d-car-simulator/"],
+["Unblocked Games 66","https://unblockedgames66.io/"],
+["Run 3","https://run-3online.github.io"],
+["Bee Swarm Simulator","https://dddatt.github.io/bss/"],
+["Elastic Face","https://quiz-50.github.io/casual-games/elastic-face/"],
+["Tag","https://quiz-50.github.io/action-games/tag"],
+["Nut Simulator","https://quiz-50.github.io/casual-games/nut-simulator/"],
+["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
+["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
+["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
+["Slap Jack","https://slapjack.thirdwavesoft.com/"],
+["Slope V3","https://slope3.io/"],
+["Minecraft Packs","https://resourcepack.net/"],
+["Class 76","https://class-76.github.io/"],
+["MC Skins","https://mcskins.org/"]
+];
+
+window.onload = () => {
+    const sidebar = document.querySelector(".sidebar");
+
+    games.forEach(game => {
+        const div = document.createElement("div");
+        div.className = "game-btn";
+        div.onclick = () => loadGame(game[1]);
+
+        div.innerHTML = `
+            <img src="pfp.png">
+            <span>${game[0]}</span>
+        `;
+
+        sidebar.appendChild(div);
+    });
+};
+</script>
+
+</div>
+
+<div class="main">
+    <iframe id="frame"></iframe>
+    <div id="error">⚠️ Game cannot be embedded</div>
+</div>
 
 <script>
-// fallback if blocked
-setTimeout(() => {
-    try {
-        document.getElementById("gameFrame").contentWindow.location.href;
-    } catch {
-        window.open("https://bonk.io", "_blank");
-    }
-}, 1000);
+function loadGame(url) {
+    const frame = document.getElementById("frame");
+    const error = document.getElementById("error");
+
+    error.style.display = "none";
+    frame.style.display = "block";
+    frame.src = url;
+
+    setTimeout(() => {
+        try {
+            frame.contentWindow.location.href;
+        } catch {
+            frame.style.display = "none";
+            error.style.display = "block";
+        }
+    }, 2000);
+}
 </script>
 
 </body>
