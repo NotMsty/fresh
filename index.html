@@ -21,7 +21,7 @@ body {
     overflow-y: scroll;
 }
 
-/* Buttons */
+/* Game Buttons */
 .game-btn {
     display: flex;
     align-items: center;
@@ -40,9 +40,11 @@ body {
 }
 
 .game-btn img {
-    width: 35px;
-    height: 35px;
-    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* makes it look like a real pfp */
+    object-fit: cover;
+    border: 2px solid #1f2a50;
 }
 
 /* Main */
@@ -57,23 +59,27 @@ iframe {
     border: none;
 }
 
-/* Error */
-#error {
+/* Loading */
+#loading {
     position: absolute;
     top: 50%;
     left: 60%;
     transform: translate(-50%, -50%);
+    font-size: 20px;
     display: none;
-    font-size: 22px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar"></div>
 
-<!-- ALL GAMES -->
+<div class="main">
+    <iframe id="frame"></iframe>
+    <div id="loading">Loading game...</div>
+</div>
+
 <script>
 const games = [
 ["Doge Miner","https://dogeminer-online.github.io/file/"],
@@ -112,48 +118,39 @@ const games = [
 ["MC Skins","https://mcskins.org/"]
 ];
 
-window.onload = () => {
-    const sidebar = document.querySelector(".sidebar");
+const sidebar = document.getElementById("sidebar");
 
-    games.forEach(game => {
-        const div = document.createElement("div");
-        div.className = "game-btn";
-        div.onclick = () => loadGame(game[1]);
+// Create buttons
+games.forEach(game => {
+    const div = document.createElement("div");
+    div.className = "game-btn";
 
-        div.innerHTML = `
-            <img src="pfp.png">
-            <span>${game[0]}</span>
-        `;
+    div.onclick = () => loadGame(game[1]);
 
-        sidebar.appendChild(div);
-    });
-};
-</script>
+    div.innerHTML = `
+        <img src="pfp.png">
+        <span>${game[0]}</span>
+    `;
 
-</div>
+    sidebar.appendChild(div);
+});
 
-<div class="main">
-    <iframe id="frame"></iframe>
-    <div id="error">⚠️ Game cannot be embedded</div>
-</div>
-
-<script>
+// Smart loader
 function loadGame(url) {
     const frame = document.getElementById("frame");
-    const error = document.getElementById("error");
+    const loading = document.getElementById("loading");
 
-    error.style.display = "none";
-    frame.style.display = "block";
+    loading.style.display = "block";
     frame.src = url;
 
     setTimeout(() => {
         try {
             frame.contentWindow.location.href;
+            loading.style.display = "none";
         } catch {
-            frame.style.display = "none";
-            error.style.display = "block";
+            window.location.href = url;
         }
-    }, 2000);
+    }, 1500);
 }
 </script>
 
