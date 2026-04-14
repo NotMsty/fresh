@@ -12,7 +12,6 @@ body {
     font-family: Arial;
     background: radial-gradient(circle at top, #0f172a, #000);
     color: white;
-    overflow: hidden;
 }
 
 /* Sidebar */
@@ -22,11 +21,8 @@ body {
     height: 100%;
     background: #020617;
     overflow-y: auto;
-    border-right: 1px solid #1e293b;
-    animation: slideIn 0.5s ease;
 }
 
-/* Search */
 .search {
     margin: 10px;
     padding: 10px;
@@ -37,28 +33,24 @@ body {
     color: white;
 }
 
-/* Buttons */
 .game-btn {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 10px;
     margin: 6px;
-    border-radius: 10px;
     background: #0f172a;
+    border-radius: 10px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .game-btn:hover {
     background: #1e293b;
-    transform: scale(1.03);
 }
 
 .left {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
 }
 
 .game-btn img {
@@ -67,191 +59,119 @@ body {
     border-radius: 50%;
 }
 
-/* Star */
-.star {
-    cursor: pointer;
-    font-size: 18px;
-}
-
 /* Main */
 .main {
     margin-left: 260px;
     height: 100vh;
-    position: relative;
 }
 
-/* Frame */
 iframe {
     width: 100%;
     height: 100%;
     border: none;
-    display: none;
-    animation: fadeIn 0.5s ease;
 }
 
 /* Home */
 .home {
-    padding: 40px;
-    animation: fadeIn 0.5s ease;
+    padding: 30px;
 }
 
 .title {
-    font-size: 48px;
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    -webkit-background-clip: text;
-    color: transparent;
+    font-size: 45px;
 }
 
-/* Grid */
-.grid {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background: #0f172a;
-    padding: 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.05);
-    background: #1e293b;
-}
-
-/* Loading */
-#loading {
-    position: absolute;
-    top: 50%;
-    left: 60%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
-@keyframes slideIn {
-    from {transform: translateX(-100%);}
-    to {transform: translateX(0);}
-}
 </style>
 </head>
 
 <body>
 
 <div class="sidebar">
-    <input class="search" id="search" placeholder="Search games...">
-    <div id="sidebar"></div>
+<input class="search" id="search" placeholder="Search...">
+<div id="sidebar"></div>
 </div>
 
 <div class="main">
-    <div id="home" class="home">
-        <div class="title">🔥 Fresh Games</div>
-        <p>Play and save your favorite games instantly.</p>
+<div class="home">
+<h1 class="title">🔥 Fresh Games</h1>
+<p>All your games + proxy system.</p>
+</div>
 
-        <div class="grid" id="favoritesGrid"></div>
-    </div>
-
-    <iframe id="frame"></iframe>
-    <div id="loading">Loading...</div>
+<iframe id="frame"></iframe>
 </div>
 
 <script>
 const games = [
 ["Doge Miner","https://dogeminer-online.github.io/file/"],
 ["Kart Bros","https://kartbros.io/"],
+["Tung Tung Clicker","https://www.tungsahurclicker.com/"],
 ["Crossy Road","https://crossy-road.com/cross-road.embed"],
+["Infinite Craft","https://infinite-craft.gg/"],
+["Pretty Good Games","https://newunblockedgames.gitlab.io/"],
+["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
 ["Bonk IO","https://bonk.io"],
+["Hitbox IO","https://hitbox.io"],
+["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
+["Block Blast","https://blockblast.game/game"],
+["AZ Games","https://azgames.io/"],
+["Geo Dash Spam","https://geometrydashspam.io/"],
+["Geometry Games","https://geometrygames.io"],
+["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
+["Car Climb Racing","https://run-3online.github.io/go/class-785.html"],
+["Madalin Stunt Cars 3","https://run-3online.github.io/go/class-566.html"],
+["Earn to Die","https://run-3online.github.io/go/class-523.html"],
+["Super Racing GT","https://run-3online.github.io/go/class-705.html"],
+["3D Car Simulator","https://sudoku-online.github.io/a2/3d-car-simulator/"],
+["Unblocked Games 66","https://unblockedgames66.io/"],
 ["Run 3","https://run-3online.github.io"],
-["Slope","https://slope3.io/"],
+["Bee Swarm Simulator","https://dddatt.github.io/bss/"],
+["Elastic Face","https://quiz-50.github.io/casual-games/elastic-face/"],
+["Tag","https://quiz-50.github.io/action-games/tag"],
+["Nut Simulator","https://quiz-50.github.io/casual-games/nut-simulator/"],
 ["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
 ["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
-["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"]
+["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
+["Slap Jack","https://slapjack.thirdwavesoft.com/"],
+["Slope V3","https://slope3.io/"],
+["Minecraft Packs","https://resourcepack.net/"],
+["Class 76","https://class-76.github.io/"],
+["MC Skins","https://mcskins.org/"]
 ];
-
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 const sidebar = document.getElementById("sidebar");
 const search = document.getElementById("search");
-const favGrid = document.getElementById("favoritesGrid");
 
-function renderGames(filter="") {
+// render
+function render(filter="") {
     sidebar.innerHTML = "";
-
     games.filter(g => g[0].toLowerCase().includes(filter.toLowerCase()))
     .forEach(game => {
         const div = document.createElement("div");
         div.className = "game-btn";
 
-        const isFav = favorites.includes(game[0]);
-
         div.innerHTML = `
-            <div class="left">
-                <img src="pfp.png">
-                <span>${game[0]}</span>
-            </div>
-            <div class="star">${isFav ? "⭐" : "☆"}</div>
+        <div class="left">
+            <img src="pfp.png">
+            <span>${game[0]}</span>
+        </div>
         `;
 
         div.onclick = () => loadGame(game[1]);
-
-        div.querySelector(".star").onclick = (e) => {
-            e.stopPropagation();
-            toggleFavorite(game[0]);
-        };
 
         sidebar.appendChild(div);
     });
 }
 
-function toggleFavorite(name) {
-    if (favorites.includes(name)) {
-        favorites = favorites.filter(f => f !== name);
-    } else {
-        favorites.push(name);
-    }
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    renderGames(search.value);
-    renderFavorites();
-}
+search.oninput = () => render(search.value);
 
-function renderFavorites() {
-    favGrid.innerHTML = "";
-    games.filter(g => favorites.includes(g[0])).forEach(game => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerText = game[0];
-        card.onclick = () => loadGame(game[1]);
-        favGrid.appendChild(card);
-    });
-}
-
-search.addEventListener("input", () => renderGames(search.value));
-
+// 🔥 PROXY LOADER
 function loadGame(url) {
-    document.getElementById("home").style.display = "none";
-    const frame = document.getElementById("frame");
-    const loading = document.getElementById("loading");
+    document.getElementById("frame").style.display = "block";
 
-    frame.style.display = "block";
-    loading.style.display = "block";
-
-    frame.src = url;
-
-    setTimeout(() => loading.style.display = "none", 1500);
+    document.getElementById("frame").src =
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
 }
 
-renderGames();
-renderFavorites();
+render();
 </script>
 
 </body>
