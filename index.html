@@ -10,8 +10,21 @@
 body {
     margin: 0;
     font-family: Arial;
-    background: radial-gradient(circle at top, #0f172a, #000);
+    background: #020617;
     color: white;
+    overflow: hidden;
+}
+
+/* REMOVE WHITE SCROLLBAR */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #020617;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 10px;
 }
 
 /* Sidebar */
@@ -23,7 +36,8 @@ body {
     overflow-y: auto;
 }
 
-.search {
+/* Search */
+.search, .browser {
     margin: 10px;
     padding: 10px;
     width: calc(100% - 20px);
@@ -33,24 +47,23 @@ body {
     color: white;
 }
 
+/* Game Button */
 .game-btn {
     display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 6px;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    margin: 8px;
+    border-radius: 12px;
     background: #0f172a;
-    border-radius: 10px;
     cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
 }
 
 .game-btn:hover {
     background: #1e293b;
-}
-
-.left {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+    transform: scale(1.03);
 }
 
 .game-btn img {
@@ -63,40 +76,61 @@ body {
 .main {
     margin-left: 260px;
     height: 100vh;
+    position: relative;
 }
 
+/* Frame */
 iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-/* Home */
-.home {
-    padding: 30px;
+/* Top browser bar */
+.browser-bar {
+    position: absolute;
+    top: 0;
+    left: 260px;
+    right: 0;
+    height: 50px;
+    background: #020617;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 10;
 }
 
-.title {
-    font-size: 45px;
+.browser {
+    flex: 1;
 }
 
+/* Frame offset */
+.frame-container {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
 </style>
 </head>
 
 <body>
 
 <div class="sidebar">
-<input class="search" id="search" placeholder="Search...">
-<div id="sidebar"></div>
+    <input class="search" id="search" placeholder="Search games...">
+    <div id="sidebar"></div>
+</div>
+
+<!-- 🔥 BROWSER BAR -->
+<div class="browser-bar">
+    <input class="browser" id="browserInput" placeholder="Search Google or type URL...">
 </div>
 
 <div class="main">
-<div class="home">
-<h1 class="title">🔥 Fresh Games</h1>
-<p>All your games + proxy system.</p>
-</div>
-
-<iframe id="frame"></iframe>
+    <div class="frame-container">
+        <iframe id="frame"></iframe>
+    </div>
 </div>
 
 <script>
@@ -139,23 +173,23 @@ const games = [
 
 const sidebar = document.getElementById("sidebar");
 const search = document.getElementById("search");
+const frame = document.getElementById("frame");
 
-// render
+// Render games
 function render(filter="") {
     sidebar.innerHTML = "";
+
     games.filter(g => g[0].toLowerCase().includes(filter.toLowerCase()))
     .forEach(game => {
         const div = document.createElement("div");
         div.className = "game-btn";
 
         div.innerHTML = `
-        <div class="left">
             <img src="pfp.png">
             <span>${game[0]}</span>
-        </div>
         `;
 
-        div.onclick = () => loadGame(game[1]);
+        div.onclick = () => frame.src = game[1];
 
         sidebar.appendChild(div);
     });
@@ -163,13 +197,20 @@ function render(filter="") {
 
 search.oninput = () => render(search.value);
 
-// 🔥 PROXY LOADER
-function loadGame(url) {
-    document.getElementById("frame").style.display = "block";
+// 🔥 BROWSER SEARCH SYSTEM
+document.getElementById("browserInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        let input = this.value.trim();
 
-    document.getElementById("frame").src =
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
-}
+        if (input.startsWith("http")) {
+            frame.src = input;
+        } else if (input.includes(".")) {
+            frame.src = "https://" + input;
+        } else {
+            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(input);
+        }
+    }
+});
 
 render();
 </script>
