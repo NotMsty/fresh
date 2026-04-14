@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Game Hub</title>
+<title>Fresh Games</title>
 
 <style>
 body {
@@ -21,7 +21,7 @@ body {
     overflow-y: scroll;
 }
 
-/* Game Buttons */
+/* Buttons */
 .game-btn {
     display: flex;
     align-items: center;
@@ -51,12 +51,49 @@ body {
 .main {
     margin-left: 250px;
     height: 100vh;
+    position: relative;
 }
 
+/* Iframe */
 iframe {
     width: 100%;
     height: 100%;
     border: none;
+    display: none;
+}
+
+/* Home screen */
+.home {
+    padding: 40px;
+}
+
+.title {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.desc {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #ccc;
+    max-width: 700px;
+}
+
+.updates {
+    margin-top: 30px;
+    background: #111a33;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Loading */
+#loading {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    display: none;
 }
 </style>
 </head>
@@ -66,7 +103,31 @@ iframe {
 <div class="sidebar" id="sidebar"></div>
 
 <div class="main">
+    <!-- HOME HUB -->
+    <div id="home" class="home">
+        <div class="title">🎮 Welcome to Fresh Games</div>
+
+        <div class="desc">
+            Fresh Games is your all-in-one browser game hub.  
+            Play tons of games instantly with no downloads.  
+            Built for speed, simplicity, and unblocked access.
+        </div>
+
+        <div class="updates">
+            <b>🔥 Latest Updates:</b>
+            <ul>
+                <li>Added 30+ new games</li>
+                <li>Improved loading system</li>
+                <li>Better performance and smoother UI</li>
+                <li>New game hub homepage</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- GAME FRAME -->
     <iframe id="frame"></iframe>
+
+    <div id="loading">Loading game...</div>
 </div>
 
 <script>
@@ -124,19 +185,24 @@ games.forEach(game => {
     sidebar.appendChild(div);
 });
 
-// 🔥 BEST GitHub loader (no redirect, popup instead)
+// Loader (NO popup, NO new tab)
 function loadGame(url) {
     const frame = document.getElementById("frame");
+    const home = document.getElementById("home");
+    const loading = document.getElementById("loading");
 
-    // Try embed first
+    home.style.display = "none";
+    frame.style.display = "block";
+    loading.style.display = "block";
+
     frame.src = url;
 
-    // If blocked → open popup instead
     setTimeout(() => {
         try {
             frame.contentWindow.location.href;
+            loading.style.display = "none";
         } catch {
-            window.open(url, "_blank", "width=1200,height=800");
+            window.location.replace(url);
         }
     }, 1200);
 }
