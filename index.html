@@ -13,176 +13,174 @@ body {
     color: white;
 }
 
-/* subtle grid glow background */
-body::before {
-    content: "";
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(#22c55e22 1px, transparent 1px);
-    background-size: 30px 30px;
-    z-index: -1;
+/* header */
+.header {
+    text-align: center;
+    padding: 20px;
 }
 
-/* HERO */
-.hero {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 80px 10%;
+.header h1 span {
+    color: #22c55e;
 }
 
-/* TEXT */
-.hero-text h1 {
-    font-size: 60px;
-    margin: 0;
+/* search */
+.search {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-.hero-text span {
-    background: linear-gradient(90deg, #22c55e, #4ade80);
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-.hero-text p {
-    margin-top: 20px;
-    max-width: 500px;
-    color: #bbf7d0;
-}
-
-/* BUTTONS */
-.buttons {
-    margin-top: 30px;
-}
-
-.btn {
-    padding: 12px 25px;
-    border-radius: 10px;
+.search input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 8px;
     border: none;
-    margin-right: 10px;
-    font-weight: bold;
+}
+
+/* category buttons */
+.categories {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.categories button {
+    margin: 5px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #14532d;
+    color: white;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-.btn-green {
-    background: #22c55e;
-    color: black;
-    box-shadow: 0 0 15px #22c55e88;
+.categories button:hover {
+    background: #166534;
 }
 
-.btn-green:hover {
-    transform: scale(1.05);
-}
-
-.btn-dark {
-    background: #14532d;
-    color: #bbf7d0;
-}
-
-/* FLOATING CARDS */
-.hero-images {
-    position: relative;
-    width: 400px;
-    height: 300px;
-}
-
-.card {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    border-radius: 15px;
-    background: #14532d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    color: #bbf7d0;
-    box-shadow: 0 0 20px #22c55e44;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: scale(1.1);
-}
-
-/* positioning */
-.card1 { top: 0; left: 50px; }
-.card2 { top: 120px; left: 200px; }
-.card3 { top: 50px; left: 250px; }
-.card4 { top: 180px; left: 50px; }
-
-/* GAME SECTION */
-.games {
-    padding: 40px 10%;
-}
-
-.games h2 {
-    margin-bottom: 20px;
-}
-
+/* grid */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    padding: 15px;
 }
 
 .game {
     background: #14532d;
-    padding: 20px;
-    border-radius: 12px;
+    border-radius: 10px;
+    cursor: pointer;
     text-align: center;
+    padding: 10px;
     transition: 0.2s;
 }
 
+.game img {
+    width: 100%;
+    border-radius: 8px;
+}
+
 .game:hover {
-    background: #166534;
     transform: scale(1.05);
+}
+
+/* iframe */
+#gameFrame {
+    width: 100%;
+    height: 80vh;
+    border: none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
-<div class="hero">
-    <div class="hero-text">
-        <h1>THE <span>FRESH</span> HUB</h1>
-        <p>Dive into 250+ clean and smooth games. Everything is fast, simple, and fresh.</p>
-
-        <div class="buttons">
-            <button class="btn btn-green" onclick="scrollToGames()">START PLAYING</button>
-            <button class="btn btn-dark">BEST LINK</button>
-        </div>
-    </div>
-
-    <div class="hero-images">
-        <div class="card card1">Game</div>
-        <div class="card card2">Play</div>
-        <div class="card card3">Fun</div>
-        <div class="card card4">Fast</div>
-    </div>
+<div class="header">
+    <h1>THE <span>FRESH</span> HUB</h1>
 </div>
 
-<!-- GAMES -->
-<div class="games" id="games">
-    <h2>🔥 Popular Games</h2>
-
-    <div class="grid">
-        <div class="game" onclick="openGame('https://1v1.lol')">1v1.LOL</div>
-        <div class="game" onclick="openGame('https://slopegame.io')">Slope</div>
-        <div class="game" onclick="openGame('https://retrobowl.me')">Retro Bowl</div>
-        <div class="game" onclick="openGame('https://krunker.io')">Krunker</div>
-    </div>
+<div class="search">
+    <input type="text" placeholder="Search..." onkeyup="searchGames(this.value)">
 </div>
+
+<div class="categories">
+    <button onclick="filter('all')">All</button>
+    <button onclick="filter('io')">IO</button>
+    <button onclick="filter('driving')">Driving</button>
+    <button onclick="filter('arcade')">Arcade</button>
+</div>
+
+<div class="grid" id="games">
+
+<!-- IO -->
+<div class="game io" onclick="playGame('https://bonk.io')">
+<img src="https://bonk.io/favicon.ico">
+<p>Bonk.io</p>
+</div>
+
+<div class="game io" onclick="playGame('https://kartbros.io/')">
+<img src="https://kartbros.io/favicon.ico">
+<p>Kart Bros</p>
+</div>
+
+<!-- DRIVING -->
+<div class="game driving" onclick="playGame('https://sudoku-online.github.io/a2/3d-car-simulator/')">
+<img src="https://sudoku-online.github.io/favicon.ico">
+<p>3D Car Sim</p>
+</div>
+
+<!-- ARCADE -->
+<div class="game arcade" onclick="playGame('https://crossy-road.com/cross-road.embed')">
+<img src="https://crossy-road.com/favicon.ico">
+<p>Crossy Road</p>
+</div>
+
+<div class="game arcade" onclick="playGame('https://geometrydash-lite.com/geometry-dash-lite.embed')">
+<img src="https://geometrydash-lite.com/favicon.ico">
+<p>Geometry Dash</p>
+</div>
+
+<div class="game arcade" onclick="playGame('https://run-3online.github.io')">
+<img src="https://run-3online.github.io/favicon.ico">
+<p>Run 3</p>
+</div>
+
+</div>
+
+<iframe id="gameFrame"></iframe>
 
 <script>
-function openGame(url) {
-    window.open(url, "_blank");
+function playGame(url) {
+    let frame = document.getElementById("gameFrame");
+    frame.src = url;
+
+    // fallback if blocked
+    setTimeout(() => {
+        try {
+            frame.contentWindow.location.href;
+        } catch {
+            window.open(url, "_blank");
+        }
+    }, 1500);
 }
 
-function scrollToGames() {
-    document.getElementById("games").scrollIntoView({ behavior: "smooth" });
+function searchGames(value) {
+    let input = value.toLowerCase();
+    let games = document.querySelectorAll(".game");
+
+    games.forEach(game => {
+        game.style.display = game.innerText.toLowerCase().includes(input) ? "block" : "none";
+    });
+}
+
+function filter(category) {
+    let games = document.querySelectorAll(".game");
+
+    games.forEach(game => {
+        if (category === "all" || game.classList.contains(category)) {
+            game.style.display = "block";
+        } else {
+            game.style.display = "none";
+        }
+    });
 }
 </script>
 
