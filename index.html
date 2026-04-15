@@ -60,10 +60,11 @@ body {
 .main {
     margin-left: 260px;
     height: 100vh;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-/* TOP SEARCH BAR */
+/* Top search bar */
 .topbar {
     height: 70px;
     background: #020617;
@@ -83,7 +84,7 @@ body {
     font-size: 16px;
 }
 
-/* HOME HUB */
+/* Home */
 .home {
     text-align: center;
     padding-top: 40px;
@@ -91,7 +92,6 @@ body {
 
 .title {
     font-size: 48px;
-    font-weight: bold;
     background: linear-gradient(90deg, #38bdf8, #6366f1);
     -webkit-background-clip: text;
     color: transparent;
@@ -104,8 +104,7 @@ body {
 
 /* Frame */
 iframe {
-    width: 100%;
-    height: calc(100% - 70px);
+    flex: 1;
     border: none;
     display: none;
 }
@@ -118,17 +117,15 @@ iframe {
 
 <div class="main">
 
-<!-- 🔥 TOP SEARCH -->
+<!-- 🔥 SEARCH BAR -->
 <div class="topbar">
     <input class="search" id="browserSearch" placeholder="Search the web or type a URL...">
 </div>
 
-<!-- 🔥 HOME HUB -->
+<!-- 🔥 HOME -->
 <div id="home" class="home">
     <div class="title">🔥 Welcome to Fresh</div>
-    <div class="desc">
-        This is your game hub. Play unblocked games, search anything, and chill.
-    </div>
+    <div class="desc">Your all-in-one game hub. Play, search, and chill.</div>
 </div>
 
 <!-- GAME FRAME -->
@@ -178,7 +175,7 @@ const sidebar = document.getElementById("sidebar");
 const frame = document.getElementById("frame");
 const home = document.getElementById("home");
 
-// Render buttons
+// Render game buttons
 games.forEach(game => {
     const div = document.createElement("div");
     div.className = "game-btn";
@@ -197,7 +194,7 @@ games.forEach(game => {
     sidebar.appendChild(div);
 });
 
-// 🔥 WORKING SEARCH BAR
+// 🔥 WORKING SEARCH (NO GOOGLE ERROR)
 document.getElementById("browserSearch").addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
         let input = this.value.trim();
@@ -210,7 +207,8 @@ document.getElementById("browserSearch").addEventListener("keydown", function(e)
         } else if (input.includes(".")) {
             frame.src = "https://" + input;
         } else {
-            frame.src = "https://www.google.com/search?q=" + encodeURIComponent(input);
+            // ✅ EMBED SAFE SEARCH
+            frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(input);
         }
     }
 });
