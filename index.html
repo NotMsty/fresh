@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
 <title>Fresh Hub</title>
-<link rel="icon" href="ixl.png">
 
 <style>
 body {
@@ -14,52 +12,31 @@ body {
     color: white;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
     position: fixed;
-    width: 260px;
+    width: 240px;
     height: 100%;
     background: #020617;
     overflow-y: auto;
 }
 
-/* Sections */
-.section-title {
-    margin: 15px;
-    font-size: 14px;
-    color: #64748b;
-}
-
-/* Game buttons */
 .game-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 12px;
     margin: 8px;
-    border-radius: 12px;
     background: #0f172a;
+    border-radius: 10px;
     cursor: pointer;
-    transition: 0.2s;
 }
 
 .game-btn:hover {
     background: #1e293b;
 }
 
-.left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.star {
-    cursor: pointer;
-}
-
-/* Main */
+/* MAIN */
 .main {
-    margin-left: 260px;
+    margin-left: 240px;
+    margin-right: 300px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -70,161 +47,211 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid #1e293b;
 }
 
 .search {
-    width: 60%;
+    width: 70%;
     padding: 12px;
-    border-radius: 12px;
+    border-radius: 10px;
     border: none;
     background: #0f172a;
     color: white;
 }
 
-.home {
-    text-align: center;
-    padding-top: 40px;
-}
-
+/* FRAME */
 iframe {
     flex: 1;
     border: none;
-    display: none;
+}
+
+/* CHAT */
+.chat {
+    position: fixed;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: #020617;
+    border-left: 1px solid #1e293b;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 10px;
+    border-bottom: 1px solid #1e293b;
+    font-weight: bold;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.msg {
+    background: #0f172a;
+    padding: 6px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.chat-input {
+    display: flex;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: #0f172a;
+    color: white;
+}
+
+.chat-input button {
+    padding: 10px;
+    background: #38bdf8;
+    border: none;
+    cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar"></div>
 
+<!-- MAIN -->
 <div class="main">
 <div class="topbar">
-<input class="search" id="search" placeholder="Search games...">
+<input id="search" class="search" placeholder="Search or enter URL...">
 </div>
-
-<div id="home" class="home">
-<h1>🔥 Fresh Hub</h1>
-<p>Play anything. Fast.</p>
-</div>
-
 <iframe id="frame"></iframe>
 </div>
 
+<!-- CHAT -->
+<div class="chat">
+    <div class="chat-header">
+        💬 Chat (<span id="onlineCount">0</span>)
+    </div>
+
+    <div id="chat" class="chat-messages"></div>
+
+    <div class="chat-input">
+        <input id="msg" placeholder="Message...">
+        <button onclick="sendMsg()">Send</button>
+    </div>
+</div>
+
 <script>
-let games = [
-{ name:"🔥 Fresh Clicker", url:"games/fresh-clicker.html", category:"Clicker" },
-
-{ name:"Doge Miner", url:"https://dogeminer-online.github.io/file/", category:"Clicker" },
-{ name:"Tung Tung Clicker", url:"https://www.tungsahurclicker.com/", category:"Clicker" },
-
-{ name:"Bonk IO", url:"https://bonk.io", category:"IO" },
-{ name:"Hitbox IO", url:"https://hitbox.io", category:"IO" },
-
-{ name:"Crossy Road", url:"https://crossy-road.com/cross-road.embed", category:"Arcade" },
-{ name:"Flappy Dunk", url:"https://flappydunk.flappydunk.co/Flappy%20Dunk.html", category:"Arcade" },
-
-{ name:"Drift Hunters", url:"https://run-3online.github.io/go/class-447.html", category:"Driving" },
-{ name:"Madalin Cars", url:"https://run-3online.github.io/go/class-566.html", category:"Driving" }
+// GAMES
+const games = [
+["🔥 Fresh Clicker","games/fresh-clicker.html"],
+["Doge Miner","https://dogeminer-online.github.io/file/"],
+["Crossy Road","https://crossy-road.com/cross-road.embed"],
+["Bonk IO","https://bonk.io"],
+["Drift Hunters","https://run-3online.github.io/go/class-447.html"]
 ];
-
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-let recent = JSON.parse(localStorage.getItem("recent") || "[]");
 
 const sidebar = document.getElementById("sidebar");
 const frame = document.getElementById("frame");
-const home = document.getElementById("home");
-const search = document.getElementById("search");
 
-// LOAD GAME
-function loadGame(game) {
-    home.style.display = "none";
-    frame.style.display = "block";
-    frame.src = game.url;
-
-    localStorage.setItem("lastGame", game.url);
-
-    recent = [game.name, ...recent.filter(g => g !== game.name)].slice(0,5);
-    localStorage.setItem("recent", JSON.stringify(recent));
-
-    render();
-}
-
-// FAVORITE TOGGLE
-function toggleFav(name) {
-    if (favorites.includes(name)) {
-        favorites = favorites.filter(f => f !== name);
-    } else {
-        favorites.push(name);
-    }
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    render();
-}
-
-// RENDER
-function render() {
-    sidebar.innerHTML = "";
-
-    // FAVORITES
-    if (favorites.length) {
-        sidebar.innerHTML += `<div class="section-title">⭐ Favorites</div>`;
-        games.filter(g => favorites.includes(g.name)).forEach(createBtn);
-    }
-
-    // RECENT
-    if (recent.length) {
-        sidebar.innerHTML += `<div class="section-title">🕒 Recent</div>`;
-        games.filter(g => recent.includes(g.name)).forEach(createBtn);
-    }
-
-    // ALL
-    sidebar.innerHTML += `<div class="section-title">🎮 All Games</div>`;
-    games.forEach(createBtn);
-}
-
-// CREATE BUTTON
-function createBtn(game) {
+// LOAD GAMES
+games.forEach(g => {
     const div = document.createElement("div");
     div.className = "game-btn";
+    div.innerText = g[0];
 
-    div.innerHTML = `
-        <div class="left">
-            <img src="pfp.png" width="30">
-            ${game.name}
-        </div>
-        <div class="star">${favorites.includes(game.name) ? "⭐" : "☆"}</div>
-    `;
-
-    div.onclick = () => loadGame(game);
-
-    div.querySelector(".star").onclick = (e) => {
-        e.stopPropagation();
-        toggleFav(game.name);
+    div.onclick = () => {
+        frame.src = g[1];
     };
 
     sidebar.appendChild(div);
-}
-
-// SEARCH FILTER
-search.addEventListener("input", () => {
-    let val = search.value.toLowerCase();
-    sidebar.innerHTML = "";
-
-    games
-        .filter(g => g.name.toLowerCase().includes(val))
-        .forEach(createBtn);
 });
 
-// LOAD LAST GAME
-let last = localStorage.getItem("lastGame");
-if (last) {
-    frame.src = last;
-    frame.style.display = "block";
-    home.style.display = "none";
-}
+// SEARCH
+document.getElementById("search").addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        let val = e.target.value.trim();
 
-render();
+        if (val.startsWith("http")) {
+            frame.src = val;
+        } else if (val.includes(".")) {
+            frame.src = "https://" + val;
+        } else {
+            frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(val);
+        }
+    }
+});
+</script>
+
+<!-- 🔥 FIREBASE CHAT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB4h3GYyRYw5xu3QJIvlMWJJvIfgkA4ULY",
+  authDomain: "fresh-hub-10d5e.firebaseapp.com",
+  projectId: "fresh-hub-10d5e",
+  storageBucket: "fresh-hub-10d5e.firebasestorage.app",
+  messagingSenderId: "19892802679",
+  appId: "1:19892802679:web:4776515006c2f49e3f2272",
+  measurementId: "G-LCVYR85TC9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const chatBox = document.getElementById("chat");
+const msgInput = document.getElementById("msg");
+
+// USERNAME
+let username = localStorage.getItem("username") || prompt("Enter username:");
+localStorage.setItem("username", username);
+
+// SEND
+window.sendMsg = async function() {
+    let text = msgInput.value.trim();
+    if (!text) return;
+
+    await addDoc(collection(db, "messages"), {
+        text,
+        user: username,
+        time: Date.now()
+    });
+
+    msgInput.value = "";
+};
+
+// RECEIVE
+const q = query(collection(db, "messages"), orderBy("time"));
+
+onSnapshot(q, snapshot => {
+    chatBox.innerHTML = "";
+    document.getElementById("onlineCount").innerText = snapshot.size;
+
+    snapshot.forEach(doc => {
+        let data = doc.data();
+
+        let div = document.createElement("div");
+        div.className = "msg";
+
+        let time = new Date(data.time).toLocaleTimeString();
+
+        div.innerHTML = `<b>${data.user}</b>: ${data.text}<br><small>${time}</small>`;
+        chatBox.appendChild(div);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
 </script>
 
 </body>
