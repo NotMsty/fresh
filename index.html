@@ -12,7 +12,6 @@ body {
     color: white;
 }
 
-/* SIDEBAR */
 .sidebar {
     position: fixed;
     width: 240px;
@@ -33,7 +32,6 @@ body {
     background: #1e293b;
 }
 
-/* MAIN */
 .main {
     margin-left: 240px;
     margin-right: 300px;
@@ -58,13 +56,11 @@ body {
     color: white;
 }
 
-/* FRAME */
 iframe {
     flex: 1;
     border: none;
 }
 
-/* CHAT */
 .chat {
     position: fixed;
     right: 0;
@@ -79,7 +75,6 @@ iframe {
 .chat-header {
     padding: 10px;
     border-bottom: 1px solid #1e293b;
-    font-weight: bold;
 }
 
 .chat-messages {
@@ -118,10 +113,8 @@ iframe {
 
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar"></div>
 
-<!-- MAIN -->
 <div class="main">
 <div class="topbar">
 <input id="search" class="search" placeholder="Search or enter URL...">
@@ -129,14 +122,9 @@ iframe {
 <iframe id="frame"></iframe>
 </div>
 
-<!-- CHAT -->
 <div class="chat">
-    <div class="chat-header">
-        💬 Chat (<span id="onlineCount">0</span>)
-    </div>
-
+    <div class="chat-header">💬 Chat (<span id="onlineCount">0</span>)</div>
     <div id="chat" class="chat-messages"></div>
-
     <div class="chat-input">
         <input id="msg" placeholder="Message...">
         <button onclick="sendMsg()">Send</button>
@@ -144,58 +132,51 @@ iframe {
 </div>
 
 <script>
-// GAMES
 const games = [
-["🔥 Fresh Clicker","games/fresh-clicker.html"],
 ["Doge Miner","https://dogeminer-online.github.io/file/"],
+["Kart Bros","https://kartbros.io/"],
 ["Crossy Road","https://crossy-road.com/cross-road.embed"],
+["Infinite Craft","https://infinite-craft.gg/"],
+["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
 ["Bonk IO","https://bonk.io"],
-["Drift Hunters","https://run-3online.github.io/go/class-447.html"]
+["Hitbox IO","https://hitbox.io"],
+["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
+["Block Blast","https://blockblast.game/game"],
+["AZ Games","https://azgames.io/"],
+["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
+["Madalin Stunt Cars","https://run-3online.github.io/go/class-566.html"],
+["Run 3","https://run-3online.github.io"],
+["Bee Swarm","https://dddatt.github.io/bss/"],
+["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
+["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
+["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
+["Slope","https://slope3.io/"]
 ];
 
 const sidebar = document.getElementById("sidebar");
 const frame = document.getElementById("frame");
 
-// LOAD GAMES
 games.forEach(g => {
     const div = document.createElement("div");
     div.className = "game-btn";
     div.innerText = g[0];
-
-    div.onclick = () => {
-        frame.src = g[1];
-    };
-
+    div.onclick = () => frame.src = g[1];
     sidebar.appendChild(div);
 });
 
-// SEARCH
 document.getElementById("search").addEventListener("keydown", e => {
     if (e.key === "Enter") {
         let val = e.target.value.trim();
-
-        if (val.startsWith("http")) {
-            frame.src = val;
-        } else if (val.includes(".")) {
-            frame.src = "https://" + val;
-        } else {
-            frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(val);
-        }
+        if (val.startsWith("http")) frame.src = val;
+        else if (val.includes(".")) frame.src = "https://" + val;
+        else frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(val);
     }
 });
 </script>
 
-<!-- 🔥 FIREBASE CHAT -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB4h3GYyRYw5xu3QJIvlMWJJvIfgkA4ULY",
@@ -203,8 +184,7 @@ const firebaseConfig = {
   projectId: "fresh-hub-10d5e",
   storageBucket: "fresh-hub-10d5e.firebasestorage.app",
   messagingSenderId: "19892802679",
-  appId: "1:19892802679:web:4776515006c2f49e3f2272",
-  measurementId: "G-LCVYR85TC9"
+  appId: "1:19892802679:web:4776515006c2f49e3f2272"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -213,11 +193,9 @@ const db = getFirestore(app);
 const chatBox = document.getElementById("chat");
 const msgInput = document.getElementById("msg");
 
-// USERNAME
 let username = localStorage.getItem("username") || prompt("Enter username:");
 localStorage.setItem("username", username);
 
-// SEND
 window.sendMsg = async function() {
     let text = msgInput.value.trim();
     if (!text) return;
@@ -231,7 +209,6 @@ window.sendMsg = async function() {
     msgInput.value = "";
 };
 
-// RECEIVE
 const q = query(collection(db, "messages"), orderBy("time"));
 
 onSnapshot(q, snapshot => {
@@ -240,13 +217,9 @@ onSnapshot(q, snapshot => {
 
     snapshot.forEach(doc => {
         let data = doc.data();
-
         let div = document.createElement("div");
         div.className = "msg";
-
-        let time = new Date(data.time).toLocaleTimeString();
-
-        div.innerHTML = `<b>${data.user}</b>: ${data.text}<br><small>${time}</small>`;
+        div.innerHTML = `<b>${data.user}</b>: ${data.text}`;
         chatBox.appendChild(div);
     });
 
