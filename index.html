@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>IXL | Math, Language Arts, Science, Social Studies</title>
+<title>Fresh Hub</title>
 <link rel="icon" href="ixl.png">
 
 <style>
@@ -12,17 +12,6 @@ body {
     font-family: Arial;
     background: #020617;
     color: white;
-}
-
-/* Scrollbar fix */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #020617;
-}
-::-webkit-scrollbar-thumb {
-    background: #1e293b;
 }
 
 /* Sidebar */
@@ -34,26 +23,38 @@ body {
     overflow-y: auto;
 }
 
+/* Sections */
+.section-title {
+    margin: 15px;
+    font-size: 14px;
+    color: #64748b;
+}
+
 /* Game buttons */
 .game-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
     padding: 12px;
     margin: 8px;
     border-radius: 12px;
     background: #0f172a;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .game-btn:hover {
     background: #1e293b;
 }
 
-.game-btn img {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+.left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.star {
+    cursor: pointer;
 }
 
 /* Main */
@@ -64,13 +65,11 @@ body {
     flex-direction: column;
 }
 
-/* Top search bar */
 .topbar {
     height: 70px;
-    background: #020617;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     border-bottom: 1px solid #1e293b;
 }
 
@@ -81,28 +80,13 @@ body {
     border: none;
     background: #0f172a;
     color: white;
-    font-size: 16px;
 }
 
-/* Home */
 .home {
     text-align: center;
     padding-top: 40px;
 }
 
-.title {
-    font-size: 48px;
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    -webkit-background-clip: text;
-    color: transparent;
-}
-
-.desc {
-    margin-top: 10px;
-    color: #94a3b8;
-}
-
-/* Frame */
 iframe {
     flex: 1;
     border: none;
@@ -116,102 +100,131 @@ iframe {
 <div class="sidebar" id="sidebar"></div>
 
 <div class="main">
-
-<!-- 🔥 SEARCH BAR -->
 <div class="topbar">
-    <input class="search" id="browserSearch" placeholder="Search the web or type a URL...">
+<input class="search" id="search" placeholder="Search games...">
 </div>
 
-<!-- 🔥 HOME -->
 <div id="home" class="home">
-    <div class="title">🔥 Welcome to Fresh</div>
-    <div class="desc">Your all-in-one game hub. Play, search, and chill.</div>
+<h1>🔥 Fresh Hub</h1>
+<p>Play anything. Fast.</p>
 </div>
 
-<!-- GAME FRAME -->
 <iframe id="frame"></iframe>
-
 </div>
 
 <script>
-const games = [
-["Doge Miner","https://dogeminer-online.github.io/file/"],
-["Kart Bros","https://kartbros.io/"],
-["Tung Tung Clicker","https://www.tungsahurclicker.com/"],
-["Crossy Road","https://crossy-road.com/cross-road.embed"],
-["Infinite Craft","https://infinite-craft.gg/"],
-["Pretty Good Games","https://newunblockedgames.gitlab.io/"],
-["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
-["Bonk IO","https://bonk.io"],
-["Hitbox IO","https://hitbox.io"],
-["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
-["Block Blast","https://blockblast.game/game"],
-["AZ Games","https://azgames.io/"],
-["Geo Dash Spam","https://geometrydashspam.io/"],
-["Geometry Games","https://geometrygames.io"],
-["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
-["Car Climb Racing","https://run-3online.github.io/go/class-785.html"],
-["Madalin Stunt Cars 3","https://run-3online.github.io/go/class-566.html"],
-["Earn to Die","https://run-3online.github.io/go/class-523.html"],
-["Super Racing GT","https://run-3online.github.io/go/class-705.html"],
-["3D Car Simulator","https://sudoku-online.github.io/a2/3d-car-simulator/"],
-["Unblocked Games 66","https://unblockedgames66.io/"],
-["Run 3","https://run-3online.github.io"],
-["Bee Swarm Simulator","https://dddatt.github.io/bss/"],
-["Elastic Face","https://quiz-50.github.io/casual-games/elastic-face/"],
-["Tag","https://quiz-50.github.io/action-games/tag"],
-["Nut Simulator","https://quiz-50.github.io/casual-games/nut-simulator/"],
-["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
-["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
-["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
-["Slap Jack","https://slapjack.thirdwavesoft.com/"],
-["Slope V3","https://slope3.io/"],
-["Minecraft Packs","https://resourcepack.net/"],
-["Class 76","https://class-76.github.io/"],
-["MC Skins","https://mcskins.org/"]
+let games = [
+{ name:"🔥 Fresh Clicker", url:"games/fresh-clicker.html", category:"Clicker" },
+
+{ name:"Doge Miner", url:"https://dogeminer-online.github.io/file/", category:"Clicker" },
+{ name:"Tung Tung Clicker", url:"https://www.tungsahurclicker.com/", category:"Clicker" },
+
+{ name:"Bonk IO", url:"https://bonk.io", category:"IO" },
+{ name:"Hitbox IO", url:"https://hitbox.io", category:"IO" },
+
+{ name:"Crossy Road", url:"https://crossy-road.com/cross-road.embed", category:"Arcade" },
+{ name:"Flappy Dunk", url:"https://flappydunk.flappydunk.co/Flappy%20Dunk.html", category:"Arcade" },
+
+{ name:"Drift Hunters", url:"https://run-3online.github.io/go/class-447.html", category:"Driving" },
+{ name:"Madalin Cars", url:"https://run-3online.github.io/go/class-566.html", category:"Driving" }
 ];
+
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+let recent = JSON.parse(localStorage.getItem("recent") || "[]");
 
 const sidebar = document.getElementById("sidebar");
 const frame = document.getElementById("frame");
 const home = document.getElementById("home");
+const search = document.getElementById("search");
 
-// Render game buttons
-games.forEach(game => {
+// LOAD GAME
+function loadGame(game) {
+    home.style.display = "none";
+    frame.style.display = "block";
+    frame.src = game.url;
+
+    localStorage.setItem("lastGame", game.url);
+
+    recent = [game.name, ...recent.filter(g => g !== game.name)].slice(0,5);
+    localStorage.setItem("recent", JSON.stringify(recent));
+
+    render();
+}
+
+// FAVORITE TOGGLE
+function toggleFav(name) {
+    if (favorites.includes(name)) {
+        favorites = favorites.filter(f => f !== name);
+    } else {
+        favorites.push(name);
+    }
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    render();
+}
+
+// RENDER
+function render() {
+    sidebar.innerHTML = "";
+
+    // FAVORITES
+    if (favorites.length) {
+        sidebar.innerHTML += `<div class="section-title">⭐ Favorites</div>`;
+        games.filter(g => favorites.includes(g.name)).forEach(createBtn);
+    }
+
+    // RECENT
+    if (recent.length) {
+        sidebar.innerHTML += `<div class="section-title">🕒 Recent</div>`;
+        games.filter(g => recent.includes(g.name)).forEach(createBtn);
+    }
+
+    // ALL
+    sidebar.innerHTML += `<div class="section-title">🎮 All Games</div>`;
+    games.forEach(createBtn);
+}
+
+// CREATE BUTTON
+function createBtn(game) {
     const div = document.createElement("div");
     div.className = "game-btn";
 
     div.innerHTML = `
-        <img src="pfp.png">
-        <span>${game[0]}</span>
+        <div class="left">
+            <img src="pfp.png" width="30">
+            ${game.name}
+        </div>
+        <div class="star">${favorites.includes(game.name) ? "⭐" : "☆"}</div>
     `;
 
-    div.onclick = () => {
-        home.style.display = "none";
-        frame.style.display = "block";
-        frame.src = game[1];
+    div.onclick = () => loadGame(game);
+
+    div.querySelector(".star").onclick = (e) => {
+        e.stopPropagation();
+        toggleFav(game.name);
     };
 
     sidebar.appendChild(div);
+}
+
+// SEARCH FILTER
+search.addEventListener("input", () => {
+    let val = search.value.toLowerCase();
+    sidebar.innerHTML = "";
+
+    games
+        .filter(g => g.name.toLowerCase().includes(val))
+        .forEach(createBtn);
 });
 
-// 🔥 WORKING SEARCH (NO GOOGLE ERROR)
-document.getElementById("browserSearch").addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-        let input = this.value.trim();
+// LOAD LAST GAME
+let last = localStorage.getItem("lastGame");
+if (last) {
+    frame.src = last;
+    frame.style.display = "block";
+    home.style.display = "none";
+}
 
-        home.style.display = "none";
-        frame.style.display = "block";
-
-        if (input.startsWith("http")) {
-            frame.src = input;
-        } else if (input.includes(".")) {
-            frame.src = "https://" + input;
-        } else {
-            // ✅ EMBED SAFE SEARCH
-            frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(input);
-        }
-    }
-});
+render();
 </script>
 
 </body>
