@@ -5,259 +5,168 @@
 <title>Calculator</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
-}
+body {margin:0;font-family:Arial;background:#0f172a;color:white;}
 
-/* CALCULATOR */
-.calc {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #020617;
-    padding: 20px;
-    border-radius: 12px;
-    width: 260px;
-}
-
-.display {
-    width: 100%;
-    height: 50px;
-    background: black;
-    color: lime;
-    font-size: 20px;
-    margin-bottom: 10px;
-    padding: 10px;
-}
-
-.btns button {
-    width: 60px;
-    height: 50px;
-    margin: 3px;
-    font-size: 18px;
-    background: #1e293b;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
+/* CALC */
+.calc {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+background:#020617;padding:20px;border-radius:12px;width:260px;}
+.display {width:100%;height:50px;background:black;color:lime;font-size:20px;margin-bottom:10px;padding:10px;}
+.btns button {width:60px;height:50px;margin:3px;background:#1e293b;color:white;border:none;}
 
 /* HUB */
-#hub, #admin {
-    display: none;
-    width: 100%;
-    height: 100vh;
-}
+#hub,#admin {display:none;height:100vh;}
+.sidebar {width:240px;height:100%;position:fixed;background:#020617;overflow-y:auto;}
+.game-btn {padding:10px;margin:6px;background:#0f172a;border-radius:8px;cursor:pointer;}
+.game-btn:hover {background:#1e293b;}
+.main {margin-left:240px;margin-right:300px;height:100%;display:flex;flex-direction:column;}
+.topbar {height:60px;display:flex;justify-content:center;align-items:center;}
+.search {width:60%;padding:10px;border-radius:10px;border:none;background:#0f172a;color:white;}
+iframe {flex:1;border:none;}
 
-.sidebar {
-    width: 240px;
-    height: 100%;
-    position: fixed;
-    background: #020617;
-    overflow-y: auto;
-}
+/* CHAT */
+.chat {position:fixed;right:0;width:300px;height:100%;background:#020617;border-left:1px solid #1e293b;display:flex;flex-direction:column;}
+.chat-messages {flex:1;overflow-y:auto;padding:10px;}
+.msg {background:#0f172a;padding:6px;border-radius:8px;margin-bottom:5px;}
+.chat-input {display:flex;}
+.chat-input input {flex:1;padding:10px;background:#0f172a;border:none;color:white;}
+.chat-input button {padding:10px;background:#38bdf8;border:none;}
 
-.game-btn {
-    padding: 12px;
-    margin: 8px;
-    background: #0f172a;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.game-btn:hover {
-    background: #1e293b;
-}
-
-.main {
-    margin-left: 240px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.topbar {
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.search {
-    width: 60%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #0f172a;
-    color: white;
-}
-
-iframe {
-    flex: 1;
-    border: none;
-}
-
-/* ADMIN */
-.admin-box {
-    padding: 20px;
-}
+/* MUSIC */
+.music-player {background:#020617;padding:10px;border-bottom:1px solid #1e293b;}
+.music-player iframe {width:100%;height:120px;}
+.song-btn {background:#0f172a;padding:5px 10px;margin:3px;border-radius:6px;cursor:pointer;display:inline-block;}
+.song-btn:hover {background:#1e293b;}
 </style>
 </head>
 
 <body>
 
-<!-- CALCULATOR -->
+<!-- CALC -->
 <div class="calc" id="calc">
 <input class="display" id="display" readonly>
-
 <div class="btns">
-<button onclick="press('7')">7</button>
-<button onclick="press('8')">8</button>
-<button onclick="press('9')">9</button>
-
-<button onclick="press('4')">4</button>
-<button onclick="press('5')">5</button>
-<button onclick="press('6')">6</button>
-
-<button onclick="press('1')">1</button>
-<button onclick="press('2')">2</button>
-<button onclick="press('3')">3</button>
-
-<button onclick="press('0')">0</button>
-<button onclick="clearDisplay()">C</button>
-<button onclick="checkCode()">=</button>
+<button onclick="press('7')">7</button><button onclick="press('8')">8</button><button onclick="press('9')">9</button>
+<button onclick="press('4')">4</button><button onclick="press('5')">5</button><button onclick="press('6')">6</button>
+<button onclick="press('1')">1</button><button onclick="press('2')">2</button><button onclick="press('3')">3</button>
+<button onclick="press('0')">0</button><button onclick="clearDisplay()">C</button><button onclick="checkCode()">=</button>
 </div>
 </div>
 
-<!-- GAME HUB -->
+<!-- HUB -->
 <div id="hub">
 <div class="sidebar" id="sidebar"></div>
 
 <div class="main">
 <div class="topbar">
-<input id="search" class="search" placeholder="Search or enter URL...">
+<input id="search" class="search" placeholder="Search or URL...">
 </div>
+
+<div class="music-player">
+<iframe id="musicFrame"
+src="https://www.youtube.com/embed/d3-1VYAmJ4k?autoplay=1&loop=1&playlist=d3-1VYAmJ4k"
+allow="autoplay"></iframe>
+<div id="musicList"></div>
+</div>
+
 <iframe id="frame"></iframe>
 </div>
-</div>
 
-<!-- ADMIN PANEL -->
-<div id="admin">
-<div class="admin-box">
-<h2>Admin Panel</h2>
-
-<input id="announceInput" placeholder="Announcement...">
-<button onclick="sendAnnouncement()">Send</button>
-
-<div id="announcements"></div>
+<!-- CHAT -->
+<div class="chat">
+<div id="chat" class="chat-messages"></div>
+<div class="chat-input">
+<input id="msg"><button onclick="sendMsg()">Send</button>
 </div>
 </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin"><h2 style="padding:20px;">Admin Panel</h2></div>
 
 <script>
-let input = "";
-
-function press(num) {
-    input += num;
-    document.getElementById("display").value = input;
+let input="";
+function press(n){input+=n;display.value=input;}
+function clearDisplay(){input="";display.value="";}
+function checkCode(){
+if(input==="0000"){calc.style.display="none";hub.style.display="block";}
+else if(input==="0109"){calc.style.display="none";admin.style.display="block";}
+else{try{display.value=eval(input);}catch{}input="";}
 }
 
-function clearDisplay() {
-    input = "";
-    document.getElementById("display").value = "";
-}
-
-function checkCode() {
-    if (input === "0000") {
-        document.getElementById("calc").style.display = "none";
-        document.getElementById("hub").style.display = "block";
-    } 
-    else if (input === "0109") {
-        document.getElementById("calc").style.display = "none";
-        document.getElementById("admin").style.display = "block";
-    } 
-    else {
-        try {
-            document.getElementById("display").value = eval(input);
-            input = "";
-        } catch {
-            input = "";
-        }
-    }
-}
-
-// 🔥 ALL GAMES
-const games = [
-["Doge Miner","https://dogeminer-online.github.io/file/"],
-["Kart Bros","https://kartbros.io/"],
-["Tung Tung Clicker","https://www.tungsahurclicker.com/"],
+/* 🔥 MASSIVE GAME LIST */
+const games=[
+["Bonk IO","https://bonk.io"],["Run 3","https://run-3online.github.io"],
+["Slope","https://slope3.io"],["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
+["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
+["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
 ["Crossy Road","https://crossy-road.com/cross-road.embed"],
 ["Infinite Craft","https://infinite-craft.gg/"],
-["Pretty Good Games","https://newunblockedgames.gitlab.io/"],
-["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
-["Bonk IO","https://bonk.io"],
-["Hitbox IO","https://hitbox.io"],
-["Flappy Dunk","https://flappydunk.flappydunk.co/Flappy%20Dunk.html"],
-["Block Blast","https://blockblast.game/game"],
-["AZ Games","https://azgames.io/"],
-["Geo Dash Spam","https://geometrydashspam.io/"],
-["Geometry Games","https://geometrygames.io"],
-["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
-["Car Climb Racing","https://run-3online.github.io/go/class-785.html"],
-["Madalin Stunt Cars 3","https://run-3online.github.io/go/class-566.html"],
-["Earn to Die","https://run-3online.github.io/go/class-523.html"],
-["Super Racing GT","https://run-3online.github.io/go/class-705.html"],
-["3D Car Simulator","https://sudoku-online.github.io/a2/3d-car-simulator/"],
-["Unblocked Games 66","https://unblockedgames66.io/"],
-["Run 3","https://run-3online.github.io"],
-["Bee Swarm Simulator","https://dddatt.github.io/bss/"],
-["Elastic Face","https://quiz-50.github.io/casual-games/elastic-face/"],
-["Tag","https://quiz-50.github.io/action-games/tag"],
-["Nut Simulator","https://quiz-50.github.io/casual-games/nut-simulator/"],
-["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
+["Kart Bros","https://kartbros.io/"],
+["Doge Miner","https://dogeminer-online.github.io/file/"],
 ["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
 ["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
-["Slap Jack","https://slapjack.thirdwavesoft.com/"],
-["Slope V3","https://slope3.io/"]
+["Block Blast","https://blockblast.game/game"],
+["AZ Games","https://azgames.io/"],
+["Unblocked Games","https://unblockedgames66.io/"],
+["Madalin Cars","https://run-3online.github.io/go/class-566.html"],
+["Earn To Die","https://run-3online.github.io/go/class-523.html"]
 ];
 
-const sidebar = document.getElementById("sidebar");
-const frame = document.getElementById("frame");
-
-games.forEach(g => {
-    const div = document.createElement("div");
-    div.className = "game-btn";
-    div.innerText = g[0];
-
-    div.onclick = () => {
-        frame.src = g[1];
-    };
-
-    sidebar.appendChild(div);
+games.forEach(g=>{
+let d=document.createElement("div");
+d.className="game-btn";d.innerText=g[0];
+d.onclick=()=>frame.src=g[1];
+sidebar.appendChild(d);
 });
 
-// SEARCH
-document.getElementById("search").addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-        let val = e.target.value.trim();
-
-        if (val.startsWith("http")) frame.src = val;
-        else if (val.includes(".")) frame.src = "https://" + val;
-        else frame.src = "https://duckduckgo.com/html/?q=" + encodeURIComponent(val);
-    }
-});
-
-// ADMIN
-function sendAnnouncement() {
-    let text = document.getElementById("announceInput").value;
-    if (!text) return;
-
-    let div = document.createElement("div");
-    div.innerText = text;
-    document.getElementById("announcements").appendChild(div);
+/* SEARCH */
+search.onkeydown=e=>{
+if(e.key==="Enter"){
+let v=e.target.value.trim();
+frame.src=v.startsWith("http")?v:v.includes(".")?"https://"+v:"https://duckduckgo.com/html/?q="+encodeURIComponent(v);
 }
+};
+
+/* MUSIC */
+const songs=[["Main","d3-1VYAmJ4k"],["Chill","jfKfPfyJRdk"],["Phonk","Uj1ykZWtPYI"]];
+songs.forEach(s=>{
+let b=document.createElement("div");
+b.className="song-btn";b.innerText=s[0];
+b.onclick=()=>musicFrame.src=`https://www.youtube.com/embed/${s[1]}?autoplay=1&loop=1&playlist=${s[1]}`;
+musicList.appendChild(b);
+});
+</script>
+
+<!-- FIREBASE CHAT -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyB4h3GYyRYw5xu3QJIvlMWJJvIfgkA4ULY",
+  authDomain: "fresh-hub-10d5e.firebaseapp.com",
+  projectId: "fresh-hub-10d5e"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let username=localStorage.getItem("user")||prompt("Username:");
+localStorage.setItem("user",username);
+
+function sendMsg(){
+let t=msg.value.trim();if(!t)return;
+db.collection("messages").add({text:t,user:username,time:Date.now()});
+msg.value="";
+}
+
+db.collection("messages").orderBy("time").onSnapshot(s=>{
+chat.innerHTML="";
+s.forEach(d=>{
+let m=d.data();
+chat.innerHTML+=`<div class="msg"><b>${m.user}</b>: ${m.text}</div>`;
+});
+});
 </script>
 
 </body>
