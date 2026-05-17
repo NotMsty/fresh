@@ -2,171 +2,398 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Calculator</title>
+<title>Calculator Hub</title>
 
 <style>
-body {margin:0;font-family:Arial;background:#0f172a;color:white;}
+*{
+    box-sizing:border-box;
+}
 
-/* CALC */
-.calc {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-background:#020617;padding:20px;border-radius:12px;width:260px;}
-.display {width:100%;height:50px;background:black;color:lime;font-size:20px;margin-bottom:10px;padding:10px;}
-.btns button {width:60px;height:50px;margin:3px;background:#1e293b;color:white;border:none;}
+body{
+    margin:0;
+    background:#000;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{
+    width:8px;
+}
+::-webkit-scrollbar-thumb{
+    background:#8b5cf6;
+    border-radius:10px;
+}
+
+/* Calculator */
+.calc{
+    width:320px;
+    background:#111;
+    border-radius:25px;
+    padding:20px;
+}
+
+.display{
+    width:100%;
+    height:80px;
+    background:black;
+    color:white;
+    font-size:40px;
+    text-align:right;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+/* Buttons */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+button{
+    height:65px;
+    border-radius:50%;
+    border:none;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.num{
+    background:#333;
+    color:white;
+}
+
+.op{
+    background:orange;
+    color:white;
+}
+
+.clear{
+    background:#aaa;
+}
+
+.zero{
+    grid-column:span 2;
+    border-radius:40px;
+    text-align:left;
+    padding-left:25px;
+}
 
 /* HUB */
-#hub,#admin {display:none;height:100vh;}
-.sidebar {width:240px;height:100%;position:fixed;background:#020617;overflow-y:auto;}
-.game-btn {padding:10px;margin:6px;background:#0f172a;border-radius:8px;cursor:pointer;}
-.game-btn:hover {background:#1e293b;}
-.main {margin-left:240px;margin-right:300px;height:100%;display:flex;flex-direction:column;}
-.topbar {height:60px;display:flex;justify-content:center;align-items:center;}
-.search {width:60%;padding:10px;border-radius:10px;border:none;background:#0f172a;color:white;}
-iframe {flex:1;border:none;}
+#hub,
+#admin{
+    display:none;
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:#020617;
+}
 
-/* CHAT */
-.chat {position:fixed;right:0;width:300px;height:100%;background:#020617;border-left:1px solid #1e293b;display:flex;flex-direction:column;}
-.chat-messages {flex:1;overflow-y:auto;padding:10px;}
-.msg {background:#0f172a;padding:6px;border-radius:8px;margin-bottom:5px;}
-.chat-input {display:flex;}
-.chat-input input {flex:1;padding:10px;background:#0f172a;border:none;color:white;}
-.chat-input button {padding:10px;background:#38bdf8;border:none;}
+.sidebar{
+    width:240px;
+    height:100%;
+    position:fixed;
+    background:#020617;
+    overflow-y:auto;
+    border-right:1px solid #111827;
+}
 
-/* MUSIC */
-.music-player {background:#020617;padding:10px;border-bottom:1px solid #1e293b;}
-.music-player iframe {width:100%;height:120px;}
-.song-btn {background:#0f172a;padding:5px 10px;margin:3px;border-radius:6px;cursor:pointer;display:inline-block;}
-.song-btn:hover {background:#1e293b;}
+.game-btn{
+    padding:12px;
+    margin:8px;
+    border-radius:10px;
+    cursor:pointer;
+    background:#111827;
+    color:white;
+    transition:0.2s;
+}
+
+.game-btn:hover{
+    background:#1e293b;
+}
+
+.main{
+    margin-left:240px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.search{
+    margin:10px;
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    background:#0f172a;
+    color:white;
+    outline:none;
+}
+
+iframe{
+    flex:1;
+    border:none;
+    display:none;
+}
+
+/* Home */
+#hubPage{
+    display:none;
+    padding:20px;
+    color:white;
+}
+
+/* Admin */
+.admin-box{
+    padding:20px;
+    color:white;
+}
+
+.admin-box input{
+    margin:5px;
+    padding:10px;
+    width:250px;
+    border:none;
+    border-radius:8px;
+}
+
+.admin-box button{
+    margin:5px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
-<!-- CALC -->
+<!-- Calculator -->
 <div class="calc" id="calc">
-<input class="display" id="display" readonly>
-<div class="btns">
-<button onclick="press('7')">7</button><button onclick="press('8')">8</button><button onclick="press('9')">9</button>
-<button onclick="press('4')">4</button><button onclick="press('5')">5</button><button onclick="press('6')">6</button>
-<button onclick="press('1')">1</button><button onclick="press('2')">2</button><button onclick="press('3')">3</button>
-<button onclick="press('0')">0</button><button onclick="clearDisplay()">C</button><button onclick="checkCode()">=</button>
+<input id="display" class="display" readonly>
+
+<div class="grid">
+<button class="clear" onclick="clearDisplay()">C</button>
+<button class="clear" onclick="press('/')">÷</button>
+<button class="clear" onclick="press('*')">×</button>
+<button class="op" onclick="press('-')">−</button>
+
+<button class="num" onclick="press('7')">7</button>
+<button class="num" onclick="press('8')">8</button>
+<button class="num" onclick="press('9')">9</button>
+<button class="op" onclick="press('+')">+</button>
+
+<button class="num" onclick="press('4')">4</button>
+<button class="num" onclick="press('5')">5</button>
+<button class="num" onclick="press('6')">6</button>
+<button disabled style="opacity:0;"></button>
+
+<button class="num" onclick="press('1')">1</button>
+<button class="num" onclick="press('2')">2</button>
+<button class="num" onclick="press('3')">3</button>
+<button class="op" onclick="checkCode()">=</button>
+
+<button class="num zero" onclick="press('0')">0</button>
+<button class="num" onclick="press('.')">.</button>
 </div>
 </div>
 
 <!-- HUB -->
 <div id="hub">
+
 <div class="sidebar" id="sidebar"></div>
 
 <div class="main">
-<div class="topbar">
-<input id="search" class="search" placeholder="Search or URL...">
-</div>
 
-<div class="music-player">
-<iframe id="musicFrame"
-src="https://www.youtube.com/embed/d3-1VYAmJ4k?autoplay=1&loop=1&playlist=d3-1VYAmJ4k"
-allow="autoplay"></iframe>
-<div id="musicList"></div>
+<input id="search" class="search" placeholder="Search Google or enter URL...">
+
+<div id="hubPage">
+<h1>🔥 Fresh Hub</h1>
+<p>Select a game from the sidebar.</p>
 </div>
 
 <iframe id="frame"></iframe>
-</div>
 
-<!-- CHAT -->
-<div class="chat">
-<div id="chat" class="chat-messages"></div>
-<div class="chat-input">
-<input id="msg"><button onclick="sendMsg()">Send</button>
-</div>
 </div>
 </div>
 
 <!-- ADMIN -->
-<div id="admin"><h2 style="padding:20px;">Admin Panel</h2></div>
+<div id="admin">
+<div class="admin-box">
+
+<h2>Admin Panel</h2>
+
+<input id="gameName" placeholder="Game name">
+<input id="gameURL" placeholder="Game URL">
+
+<br>
+
+<button onclick="addGame()">Add Game</button>
+<button onclick="goBack()">Back</button>
+
+</div>
+</div>
 
 <script>
-let input="";
-function press(n){input+=n;display.value=input;}
-function clearDisplay(){input="";display.value="";}
-function checkCode(){
-if(input==="0000"){calc.style.display="none";hub.style.display="block";}
-else if(input==="0109"){calc.style.display="none";admin.style.display="block";}
-else{try{display.value=eval(input);}catch{}input="";}
+const display = document.getElementById("display");
+const calc = document.getElementById("calc");
+const hub = document.getElementById("hub");
+const admin = document.getElementById("admin");
+const sidebar = document.getElementById("sidebar");
+const frame = document.getElementById("frame");
+const hubPage = document.getElementById("hubPage");
+const search = document.getElementById("search");
+const gameName = document.getElementById("gameName");
+const gameURL = document.getElementById("gameURL");
+
+let input = "";
+
+/* Calculator */
+function press(v){
+    input += v;
+    display.value = input;
 }
 
-/* 🔥 MASSIVE GAME LIST */
-const games=[
-["Bonk IO","https://bonk.io"],["Run 3","https://run-3online.github.io"],
-["Slope","https://slope3.io"],["Drift Hunters","https://run-3online.github.io/go/class-447.html"],
-["Cluster Rush","https://quiz-50.github.io/driving-games/cluster-rush/"],
-["Eaglercraft","https://eaglercraft-orcin.vercel.app/"],
+function clearDisplay(){
+    input = "";
+    display.value = "";
+}
+
+function checkCode(){
+
+    if(input === "0000"){
+        calc.style.display = "none";
+        hub.style.display = "block";
+        showHome();
+    }
+
+    else if(input === "0109"){
+        calc.style.display = "none";
+        admin.style.display = "block";
+    }
+
+    else{
+        try{
+            input = eval(input).toString();
+            display.value = input;
+        }
+        catch{
+            display.value = "Error";
+            input = "";
+        }
+    }
+}
+
+/* Game List */
+let defaultGames = [
+["Slope","https://slope3.io/"],
+["2048","https://play2048.co/"],
+["Minesweeper","https://minesweeperonline.com/"],
 ["Crossy Road","https://crossy-road.com/cross-road.embed"],
-["Infinite Craft","https://infinite-craft.gg/"],
 ["Kart Bros","https://kartbros.io/"],
-["Doge Miner","https://dogeminer-online.github.io/file/"],
-["Baldi's Basics","https://quiz-50.github.io/casual-games/baldis-basics/"],
-["FNAF 2","https://fngames.io/five-nights-at-freddys-2.embed"],
-["Block Blast","https://blockblast.game/game"],
-["AZ Games","https://azgames.io/"],
-["Unblocked Games","https://unblockedgames66.io/"],
-["Madalin Cars","https://run-3online.github.io/go/class-566.html"],
-["Earn To Die","https://run-3online.github.io/go/class-523.html"]
+["Geometry","https://geometrygames.io"],
+["Run 3","https://run3.io/"]
 ];
 
-games.forEach(g=>{
-let d=document.createElement("div");
-d.className="game-btn";d.innerText=g[0];
-d.onclick=()=>frame.src=g[1];
-sidebar.appendChild(d);
-});
+let games = JSON.parse(localStorage.getItem("games")) || defaultGames;
 
-/* SEARCH */
-search.onkeydown=e=>{
-if(e.key==="Enter"){
-let v=e.target.value.trim();
-frame.src=v.startsWith("http")?v:v.includes(".")?"https://"+v:"https://duckduckgo.com/html/?q="+encodeURIComponent(v);
-}
-};
+/* Render */
+function renderGames(){
 
-/* MUSIC */
-const songs=[["Main","d3-1VYAmJ4k"],["Chill","jfKfPfyJRdk"],["Phonk","Uj1ykZWtPYI"]];
-songs.forEach(s=>{
-let b=document.createElement("div");
-b.className="song-btn";b.innerText=s[0];
-b.onclick=()=>musicFrame.src=`https://www.youtube.com/embed/${s[1]}?autoplay=1&loop=1&playlist=${s[1]}`;
-musicList.appendChild(b);
-});
-</script>
+    sidebar.innerHTML = "";
 
-<!-- FIREBASE CHAT -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    let home = document.createElement("div");
+    home.className = "game-btn";
+    home.innerText = "🏠 Home";
+    home.onclick = showHome;
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyB4h3GYyRYw5xu3QJIvlMWJJvIfgkA4ULY",
-  authDomain: "fresh-hub-10d5e.firebaseapp.com",
-  projectId: "fresh-hub-10d5e"
-};
+    sidebar.appendChild(home);
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+    games.forEach(g => {
 
-let username=localStorage.getItem("user")||prompt("Username:");
-localStorage.setItem("user",username);
+        let d = document.createElement("div");
 
-function sendMsg(){
-let t=msg.value.trim();if(!t)return;
-db.collection("messages").add({text:t,user:username,time:Date.now()});
-msg.value="";
+        d.className = "game-btn";
+        d.innerText = g[0];
+
+        d.onclick = () => {
+            hubPage.style.display = "none";
+            frame.style.display = "block";
+            frame.src = g[1];
+        };
+
+        sidebar.appendChild(d);
+    });
 }
 
-db.collection("messages").orderBy("time").onSnapshot(s=>{
-chat.innerHTML="";
-s.forEach(d=>{
-let m=d.data();
-chat.innerHTML+=`<div class="msg"><b>${m.user}</b>: ${m.text}</div>`;
+function showHome(){
+    frame.style.display = "none";
+    hubPage.style.display = "block";
+}
+
+function addGame(){
+
+    if(!gameName.value || !gameURL.value) return;
+
+    games.push([
+        gameName.value,
+        gameURL.value
+    ]);
+
+    localStorage.setItem(
+        "games",
+        JSON.stringify(games)
+    );
+
+    renderGames();
+
+    gameName.value = "";
+    gameURL.value = "";
+}
+
+function goBack(){
+    admin.style.display = "none";
+    calc.style.display = "block";
+}
+
+/* Search */
+search.addEventListener("keydown", e => {
+
+    if(e.key === "Enter"){
+
+        let v = search.value.trim();
+
+        if(!v) return;
+
+        let url;
+
+        if(v.startsWith("http://") || v.startsWith("https://")){
+            url = v;
+        }
+
+        else if(v.includes(".")){
+            url = "https://" + v;
+        }
+
+        else{
+            url = "https://www.google.com/search?q=" + encodeURIComponent(v);
+        }
+
+        frame.style.display = "block";
+        hubPage.style.display = "none";
+        frame.src = url;
+    }
 });
-});
+
+renderGames();
 </script>
 
 </body>
