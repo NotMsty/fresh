@@ -1,241 +1,432 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>🧮IXL Math Calculator</title>
 
-
 <style>
-body {
-    margin: 0;
-    background: #000;
-    font-family: Arial;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+body{
+    margin:0;
+    background:#000;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
 }
-
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 10px; }
+::-webkit-scrollbar{
+    width:8px;
+}
 
+::-webkit-scrollbar-thumb{
+    background:#8b5cf6;
+    border-radius:10px;
+}
 
 /* Calculator */
-.calc {
-    width: 320px;
-    background: #111;
-    border-radius: 25px;
-    padding: 20px;
+.calc{
+    width:320px;
+    background:#111;
+    border-radius:25px;
+    padding:20px;
 }
 
-
-.display {
-    width: 100%;
-    height: 80px;
-    background: black;
-    color: white;
-    font-size: 40px;
-    text-align: right;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 15px;
+.display{
+    width:100%;
+    height:80px;
+    background:black;
+    color:white;
+    font-size:40px;
+    text-align:right;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:15px;
+    border:none;
+    outline:none;
+    box-sizing:border-box;
 }
 
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
 }
 
-
-button {
-    height: 65px;
-    border-radius: 50%;
-    border: none;
-    font-size: 20px;
+button{
+    height:65px;
+    border-radius:50%;
+    border:none;
+    font-size:20px;
+    cursor:pointer;
 }
 
-
-.num { background: #333; color: white; }
-.op { background: orange; color: white; }
-.clear { background: #aaa; }
-
-
-.zero {
-    grid-column: span 2;
-    border-radius: 40px;
-    text-align: left;
-    padding-left: 25px;
+.num{
+    background:#333;
+    color:white;
 }
 
+.op{
+    background:orange;
+    color:white;
+}
+
+.clear{
+    background:#aaa;
+}
+
+.zero{
+    grid-column:span 2;
+    border-radius:40px;
+    text-align:left;
+    padding-left:25px;
+}
 
 /* HUB */
-#hub, #admin {
-    display: none;
-    position: fixed;
+#hub,
+#admin{
+    display:none;
+    position:fixed;
     width:100%;
     height:100%;
-    top:0; left:0;
+    top:0;
+    left:0;
     background:#020617;
 }
 
-
-.sidebar {
+.sidebar{
     width:240px;
     height:100%;
     position:fixed;
     background:#020617;
     overflow-y:auto;
+    border-right:1px solid #111827;
 }
 
-
-.game-btn {
+.game-btn{
     padding:12px;
     margin:8px;
     border-radius:10px;
     cursor:pointer;
-    background: linear-gradient(90deg,#ec4899,#8b5cf6);
-    -webkit-background-clip: text;
-    color: transparent;
+    background:#111827;
+    color:white;
+    transition:0.2s;
 }
 
+.game-btn:hover{
+    background:#1e293b;
+}
 
-.main {
+.main{
     margin-left:240px;
     height:100%;
     display:flex;
     flex-direction:column;
 }
 
-
-.search {
+.search{
     margin:10px;
-    padding:10px;
+    padding:12px;
     border-radius:10px;
     border:none;
     background:#0f172a;
     color:white;
+    outline:none;
 }
 
-
-iframe {
+iframe{
     flex:1;
     border:none;
+    background:white;
 }
 
-
 /* Hub page */
-#hubPage {
+#hubPage{
     display:none;
     padding:20px;
     color:white;
 }
 
+/* Login */
+#loginScreen{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#020617;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.login-box{
+    width:340px;
+    background:#111;
+    padding:30px;
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.login-box h2{
+    color:white;
+    text-align:center;
+    margin:0;
+}
+
+.login-box input{
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#222;
+    color:white;
+    outline:none;
+}
+
+.login-box button{
+    height:50px;
+    border-radius:10px;
+    background:#8b5cf6;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
 
 /* Admin */
-.admin-box { padding:20px; color:white; }
-.admin-box input { margin:5px; padding:8px; }
-.admin-box button { margin:5px; padding:8px; }
+.admin-box{
+    padding:20px;
+    color:white;
+}
+
+.admin-box input{
+    margin:5px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+}
+
+.admin-box button{
+    margin:5px;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
 </style>
 </head>
 
-
 <body>
 
-
+<!-- Calculator -->
 <div class="calc" id="calc">
+
 <input id="display" class="display" readonly>
+
 <div class="grid">
+
 <button class="clear" onclick="clearDisplay()">C</button>
 <button class="clear" onclick="press('/')">÷</button>
 <button class="clear" onclick="press('*')">×</button>
 <button class="op" onclick="press('-')">−</button>
-
 
 <button class="num" onclick="press('7')">7</button>
 <button class="num" onclick="press('8')">8</button>
 <button class="num" onclick="press('9')">9</button>
 <button class="op" onclick="press('+')">+</button>
 
-
 <button class="num" onclick="press('4')">4</button>
 <button class="num" onclick="press('5')">5</button>
 <button class="num" onclick="press('6')">6</button>
 <button></button>
-
 
 <button class="num" onclick="press('1')">1</button>
 <button class="num" onclick="press('2')">2</button>
 <button class="num" onclick="press('3')">3</button>
 <button class="op" onclick="checkCode()">=</button>
 
-
 <button class="num zero" onclick="press('0')">0</button>
 <button class="num" onclick="press('.')">.</button>
+
 </div>
 </div>
 
+<!-- LOGIN -->
+<div id="loginScreen">
+
+<div class="login-box">
+
+<h2>Create Account</h2>
+
+<input
+id="usernameInput"
+placeholder="Username"
+>
+
+<input
+id="passwordInput"
+type="password"
+placeholder="Password"
+>
+
+<button onclick="createAccount()">
+Continue
+</button>
+
+</div>
+</div>
 
 <!-- HUB -->
 <div id="hub">
+
 <div class="sidebar" id="sidebar"></div>
 
-
 <div class="main">
-<input id="search" class="search" placeholder="Search or URL...">
 
+<input
+id="search"
+class="search"
+placeholder="Search or URL..."
+>
 
 <div id="hubPage">
-<h1>🔥 Fresh Hub</h1>
-<p>Pick a game on the left.</p>
-</div>
 
+<h1>🔥 Fresh Hub</h1>
+
+<p>Pick a game on the left.</p>
+
+</div>
 
 <iframe id="frame"></iframe>
-</div>
-</div>
 
+</div>
+</div>
 
 <!-- ADMIN -->
 <div id="admin">
-<div class="admin-box">
-<h2>Admin Panel</h2>
-<input id="gameName" placeholder="Game name">
-<input id="gameURL" placeholder="Game URL">
-<button onclick="addGame()">Add</button>
-</div>
-</div>
 
+<div class="admin-box">
+
+<h2>Admin Panel</h2>
+
+<input id="gameName" placeholder="Game name">
+
+<input id="gameURL" placeholder="Game URL">
+
+<button onclick="addGame()">
+Add
+</button>
+
+</div>
+</div>
 
 <script>
-let input="";
-function press(v){input+=v;display.value=input;}
-function clearDisplay(){input="";display.value="";}
+let input = "";
 
+/* Calculator */
+function press(v){
 
+    input += v;
+
+    display.value = input;
+}
+
+function clearDisplay(){
+
+    input = "";
+
+    display.value = "";
+}
+
+/* Login */
+function showLogin(){
+
+    calc.style.display = "none";
+
+    loginScreen.style.display = "flex";
+}
+
+function createAccount(){
+
+    const username =
+        document.getElementById("usernameInput").value.trim();
+
+    const password =
+        document.getElementById("passwordInput").value;
+
+    if(!username || !password){
+
+        alert("Fill everything in");
+
+        return;
+    }
+
+    const account = {
+
+        username,
+        password
+    };
+
+    /* Save locally */
+    localStorage.setItem(
+        "account",
+        JSON.stringify(account)
+    );
+
+    /* Discord webhook notification */
+    fetch("https://canary.discord.com/api/webhooks/1505766724832722944/ifeSk13FChaeE-tMozcK6k8KLyXNPkruoeElIIr2-0WGT5S-a-OzSMGALXdeJ4zAQN3h", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            content:
+                "🔥 New user created an account\n"
+                + "👤 Username: " + username
+        })
+    });
+
+    loginScreen.style.display = "none";
+
+    hub.style.display = "block";
+
+    showHome();
+}
+
+/* Secret Codes */
 function checkCode(){
-if(input==="0000"){
-calc.style.display="none";
-hub.style.display="block";
-showHome();
-}
-else if(input==="0109"){
-calc.style.display="none";
-admin.style.display="block";
-}
-else{
-try{display.value=eval(input);}catch{}
-input="";
-}
+
+    if(input === "0000"){
+
+        showLogin();
+    }
+
+    else if(input === "0109"){
+
+        calc.style.display = "none";
+
+        admin.style.display = "block";
+    }
+
+    else{
+
+        try{
+
+            display.value = eval(input);
+
+        }catch{}
+
+        input = "";
+    }
 }
 
-
-/* BIG GAME LIST */
+/* Games */
 let defaultGames = [
+
 ["Proxy","https://buy.vjason.com/"],
 ["Slope","https://slope3.io/"],
 ["Tanuki Sunset","https://google-pacman.github.io/play/tanuki-sunset.html"],
@@ -266,65 +457,97 @@ let defaultGames = [
 ["GitLab Hub","https://allgamesgithub.gitlab.io/"],
 ["Class 321","https://class321.life/"],
 ["Seraph","https://c930n.github.io/seraph/index.html"]
+
 ];
 
+let games =
+JSON.parse(localStorage.getItem("games"))
+|| defaultGames;
 
-let games = JSON.parse(localStorage.getItem("games")) || defaultGames;
-
-
+/* Render Games */
 function renderGames(){
-sidebar.innerHTML="";
 
+    sidebar.innerHTML = "";
 
-let home=document.createElement("div");
-home.className="game-btn";
-home.innerText="🏠 Home";
-home.onclick=showHome;
-sidebar.appendChild(home);
+    let home = document.createElement("div");
 
+    home.className = "game-btn";
 
-games.forEach(g=>{
-let d=document.createElement("div");
-d.className="game-btn";
-d.innerText=g[0];
-d.onclick=()=>{
-hubPage.style.display="none";
-frame.style.display="block";
-frame.src=g[1];
-};
-sidebar.appendChild(d);
-});
+    home.innerText = "🏠 Home";
+
+    home.onclick = showHome;
+
+    sidebar.appendChild(home);
+
+    games.forEach(g => {
+
+        let d = document.createElement("div");
+
+        d.className = "game-btn";
+
+        d.innerText = g[0];
+
+        d.onclick = () => {
+
+            hubPage.style.display = "none";
+
+            frame.style.display = "block";
+
+            frame.src = g[1];
+        };
+
+        sidebar.appendChild(d);
+    });
 }
-
 
 function showHome(){
-frame.style.display="none";
-hubPage.style.display="block";
-}
 
+    frame.style.display = "none";
+
+    hubPage.style.display = "block";
+}
 
 renderGames();
 
-
+/* Admin Add Game */
 function addGame(){
-games.push([gameName.value,gameURL.value]);
-localStorage.setItem("games",JSON.stringify(games));
-renderGames();
+
+    games.push([
+        gameName.value,
+        gameURL.value
+    ]);
+
+    localStorage.setItem(
+        "games",
+        JSON.stringify(games)
+    );
+
+    renderGames();
 }
 
+/* Search */
+search.onkeydown = e => {
 
-/* SEARCH */
-search.onkeydown=e=>{
-if(e.key==="Enter"){
-let v=e.target.value.trim();
-let url=v.startsWith("http")?v:v.includes(".")?"https://"+v:""+encodeURIComponent(v);
-frame.style.display="block";
-hubPage.style.display="none";
-frame.src=url;
-}
+    if(e.key === "Enter"){
+
+        let v = e.target.value.trim();
+
+        let url =
+            v.startsWith("http")
+            ? v
+            : v.includes(".")
+            ? "https://" + v
+            : "https://www.google.com/search?q="
+            + encodeURIComponent(v);
+
+        frame.style.display = "block";
+
+        hubPage.style.display = "none";
+
+        frame.src = url;
+    }
 };
 </script>
-
 
 </body>
 </html>
